@@ -16,78 +16,65 @@
   </header>
 
   <main class="app-shell">
-    <section class="panel controls-panel">
-      <div class="controls-grid controls-grid--names">
-        <label class="control">
-          <span>Character Name</span>
-          <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
-        </label>
+  <section class="panel controls-panel">
+    <div class="controls-grid">
+      <label class="control">
+        <span>Military Activity</span>
+        <select id="activitySelect"></select>
+      </label>
 
-        <label class="control">
-          <span>Military Unit Name</span>
-          <input id="unitName" type="text" placeholder="e.g. Bloodforge Company" />
-        </label>
-      </div>
+      <label class="control">
+        <span>Military Action</span>
+        <select id="actionSelect"></select>
+      </label>
 
-      <div class="controls-grid">
-        <label class="control">
-          <span>Military Activity</span>
-          <select id="activitySelect"></select>
-        </label>
+      <label class="control">
+        <span>Unit Rank</span>
+        <select id="rankSelect"></select>
+      </label>
 
-        <label class="control">
-          <span>Military Action</span>
-          <select id="actionSelect"></select>
-        </label>
+      <label class="control">
+        <span>Campaign Buff/Debuff</span>
+        <select id="modifierSelect"></select>
+      </label>
 
-        <label class="control">
-          <span>Unit Rank</span>
-          <select id="rankSelect"></select>
-        </label>
-
-        <label class="control">
-          <span>Campaign Buff/Debuff</span>
-          <select id="modifierSelect"></select>
-        </label>
-
-        <label class="control control--wide">
-          <span>Military Enchantment / Ritual</span>
-          <select id="ritualSelect"></select>
-        </label>
-      </div>
-
-      <p id="ritualNote" class="note">No ritual selected.</p>
-    </section>
-
-    <aside class="planner-card result-panel">
-  <div class="planner-card-header">
-    <div>
-      <p class="eyebrow">Planner</p>
-      <h2>Military Unit</h2>
+      <label class="control control--wide">
+        <span>Military Enchantment / Ritual</span>
+        <select id="ritualSelect"></select>
+      </label>
     </div>
 
-    <button id="copySummary" type="button" class="copy-button">Copy summary</button>
-  </div>
+    <p id="ritualNote" class="note">No ritual selected.</p>
+  </section>
 
-  <label class="control">
-    <span>Character Name</span>
-    <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
-  </label>
+  <aside class="planner-card result-panel">
+    <div class="planner-card-header">
+      <div>
+        <p class="eyebrow">Planner</p>
+        <h2>Military Unit</h2>
+      </div>
 
-  <label class="control">
-    <span>Unit Name</span>
-    <input id="unitName" type="text" placeholder="e.g. Hearthguard" />
-  </label>
+      <button id="copySummary" type="button" class="copy-button">Copy summary</button>
+    </div>
 
-  <div class="modifier-breakdown" id="modifierBreakdown"></div>
+    <label class="control">
+      <span>Character Name</span>
+      <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
+    </label>
 
-  <div class="summary-box">
-    <h3>Downtime result</h3>
-    <div id="productionSummary" class="summary-list"></div>
-  </div>
-</aside>
-    </section>
-  </main>
+    <label class="control">
+      <span>Unit Name</span>
+      <input id="unitName" type="text" placeholder="e.g. Hearthguard" />
+    </label>
+
+    <div class="modifier-breakdown" id="modifierBreakdown"></div>
+
+    <div class="summary-box">
+      <h3>Downtime result</h3>
+      <div id="productionSummary" class="summary-list"></div>
+    </div>
+  </aside>
+</main>
 
   <script src="script.js" defer></script>
 </body>
