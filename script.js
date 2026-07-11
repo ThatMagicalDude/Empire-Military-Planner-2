@@ -1,56 +1,66 @@
-const DEFAULT_UNIT_RANK = 5;
+const DEFAULT_BASE_RANK = 5;
 const MIN_UNIT_RANK = 1;
+const DEFAULT_ACTIVITY = "guarding";
+const DEFAULT_ACTION = "mercenary-work";
 
 const state = {
   data: null,
   rituals: [],
-  activityId: "guarding",
-  actionId: "mercenary-work",
-  rank: DEFAULT_UNIT_RANK,
+  activityId: DEFAULT_ACTIVITY,
+  actionId: DEFAULT_ACTION,
+  mithrilUpgrade: 0,
   modifier: 0,
   ritualId: "none"
 };
 
 const els = {
-  characterName: document.querySelector("#characterName"),
-  unitName: document.querySelector("#unitName"),
   activitySelect: document.querySelector("#activitySelect"),
-  actionSelect: document.querySelector("#actionSelect"),
-  rankSelect: document.querySelector("#rankSelect"),
+  baseUnitRank: document.querySelector("#baseUnitRank"),
+  mithrilUpgrade: document.querySelector("#mithrilUpgrade"),
   modifierSelect: document.querySelector("#modifierSelect"),
   ritualSelect: document.querySelector("#ritualSelect"),
   ritualNote: document.querySelector("#ritualNote"),
-  breakdown: document.querySelector("#modifierBreakdown"),
-  copySummary: document.querySelector("#copySummary"),
-  actionType: document.querySelector("#actionType"),
-  actionTitle: document.querySelector("#actionTitle"),
-  actionDescription: document.querySelector("#actionDescription"),
-  lootOutput: document.querySelector("#productionSummary")
-};
 
-function slug(value) {
-  return String(value)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+  characterName: document.querySelector("#characterName"),
+  unitName: document.querySelector("#unitName"),
+  actionSelect: document.querySelector("#actionSelect"),
+  modifierBreakdown: document.querySelector("#modifierBreakdown"),
+  productionSummary: document.querySelector("#productionSummary"),
+  copySummary: document.querySelector("#copySummary"),
+
+  listEyebrow: document.querySelector("#listEyebrow"),
+  actionsHeading: document.querySelector("#actions-heading"),
+  actionCards: document.querySelector("#actionCards"),
+  actionCount: document.querySelector("#actionCount"),
+  emptyState: document.querySelector("#emptyState"),
+
+  actionDialog: document.querySelector("#actionDialog"),
+  closeDialog: document.querySelector("#closeDialog"),
+  dialogContent: document.querySelector("#dialogContent")
+};
 
 function requiredElementsExist() {
   const required = [
-    "characterName",
-    "unitName",
     "activitySelect",
-    "actionSelect",
-    "rankSelect",
+    "baseUnitRank",
+    "mithrilUpgrade",
     "modifierSelect",
     "ritualSelect",
     "ritualNote",
-    "breakdown",
+    "characterName",
+    "unitName",
+    "actionSelect",
+    "modifierBreakdown",
+    "productionSummary",
     "copySummary",
-    "actionType",
-    "actionTitle",
-    "actionDescription",
-    "lootOutput"
+    "listEyebrow",
+    "actionsHeading",
+    "actionCards",
+    "actionCount",
+    "emptyState",
+    "actionDialog",
+    "closeDialog",
+    "dialogContent"
   ];
 
   const missing = required.filter(key => !els[key]);
@@ -76,8 +86,6 @@ async function init() {
   ]);
 
   state.data = optionsData;
-  state.rank = Number(optionsData.defaultRank || DEFAULT_UNIT_RANK);
-
   state.rituals = [
     {
       id: "none",
@@ -87,27 +95,36 @@ async function init() {
       productionMultiplier: 1,
       note: "No ritual selected."
     },
-    ...(ritualData.rituals || []).map(ritual => ({
-      id: ritual.id || slug(ritual.name),
-      name: ritual.name,
-      option: ritual.option || "All",
-      rankModifier: Number(ritual.rankModifier || 0),
-      productionMultiplier: Number(ritual.productionMultiplier || 1),
-      note: ritual.note || ""
-    }))
+    ...(ritualData.rituals || [])
   ];
+
+  if (!getActivityById(state.activityId)) {
+    state.activityId = state.data.activities[0]?.id || DEFAULT_ACTIVITY;
+  }
+
+  if (!getCurrentActivity().actions.some(action => action.id === state.actionId)) {
+    state.actionId = getCurrentActivity().actions[0]?.id || DEFAULT_ACTION;
+  }
 
   populateControls();
   bindEvents();
   render();
 }
 
-function getActivity() {
-  return state.data.activities.find(activity => activity.id === state.activityId) || state.data.activities[0];
+function getMaxRank() {
+  return Number(state.data?.maxRank || 18);
 }
 
-function getAction() {
-  const activity = getActivity();
+function getActivityById(id) {
+  return state.data.activities.find(activity => activity.id === id);
+}
+
+function getCurrentActivity() {
+  return getActivityById(state.activityId) || state.data.activities[0];
+}
+
+function getCurrentAction() {
+  const activity = getCurrentActivity();
   return activity.actions.find(action => action.id === state.actionId) || activity.actions[0];
 }
 
@@ -115,31 +132,19 @@ function getRitual() {
   return state.rituals.find(ritual => ritual.id === state.ritualId) || state.rituals[0];
 }
 
-function getMaxRank() {
-  return Number(state.data.maxRank || 18);
-}
-
-function getMinRank() {
-  return Number(state.data.minRank || MIN_UNIT_RANK);
-}
-
-function getUnitLevel(rank = state.rank) {
-  return Math.max(1, Number(rank) - 4);
-}
-
 function getEffectiveRank() {
   const ritual = getRitual();
-  const raw = state.rank + state.modifier + Number(ritual.rankModifier || 0);
-  return Math.max(getMinRank(), Math.min(getMaxRank(), raw));
+  const raw = DEFAULT_BASE_RANK + state.mithrilUpgrade + state.modifier + Number(ritual.rankModifier || 0);
+  return Math.max(MIN_UNIT_RANK, Math.min(getMaxRank(), raw));
 }
 
-function getLootRow(rank = getEffectiveRank()) {
-  return state.data.lootTable.find(row => Number(row.rank) === Number(rank)) || state.data.lootTable[0];
+function getEffectiveLevel() {
+  return Math.max(1, getEffectiveRank() - 4);
 }
 
-function getLootRowForProduction(production) {
-  const rows = [...state.data.lootTable].sort((a, b) => Number(a.production) - Number(b.production));
-  return rows.find(row => Number(row.production) >= production) || rows[rows.length - 1];
+function getLootRow() {
+  const effectiveRank = getEffectiveRank();
+  return state.data.lootTable.find(row => Number(row.rank) === effectiveRank) || state.data.lootTable[0];
 }
 
 function populateControls() {
@@ -147,40 +152,65 @@ function populateControls() {
     `<option value="${activity.id}">${activity.name}</option>`
   ).join("");
 
-  els.rankSelect.innerHTML = "";
-  for (let i = DEFAULT_UNIT_RANK; i <= getMaxRank(); i += 1) {
-    const level = getUnitLevel(i);
-    els.rankSelect.insertAdjacentHTML(
-      "beforeend",
-      `<option value="${i}">Level ${level} — Rank ${i}</option>`
-    );
-  }
-
-  els.modifierSelect.innerHTML = "";
-  for (let i = -5; i <= 5; i += 1) {
-    const label = i === 0 ? "No modifier" : i > 0 ? `+${i} campaign buff` : `${i} campaign debuff`;
-    els.modifierSelect.insertAdjacentHTML("beforeend", `<option value="${i}">${label}</option>`);
-  }
-
+  populateMithrilUpgrade();
+  populateModifierSelect();
   populateActions();
   populateRituals();
 }
 
+function populateMithrilUpgrade() {
+  els.mithrilUpgrade.innerHTML = "";
+  const maxPermanentIncrease = Math.max(0, getMaxRank() - DEFAULT_BASE_RANK);
+
+  for (let i = 0; i <= maxPermanentIncrease; i += 1) {
+    const option = document.createElement("option");
+    option.value = String(i);
+
+    if (i === 0) {
+      option.textContent = "None";
+    } else {
+      const upgradedUnitLevel = i + 1;
+      option.textContent = `+${i} upgrade — costs ${upgradedUnitLevel} Imperial wain${upgradedUnitLevel === 1 ? "" : "s"} of mithril`;
+    }
+
+    els.mithrilUpgrade.appendChild(option);
+  }
+}
+
+function populateModifierSelect() {
+  els.modifierSelect.innerHTML = "";
+
+  for (let i = -4; i <= 4; i += 1) {
+    const option = document.createElement("option");
+    option.value = String(i);
+
+    if (i === 0) {
+      option.textContent = "No campaign modifier";
+    } else if (i > 0) {
+      option.textContent = `+${i} campaign buff`;
+    } else {
+      option.textContent = `${i} campaign debuff`;
+    }
+
+    els.modifierSelect.appendChild(option);
+  }
+}
+
 function populateActions() {
-  const activity = getActivity();
+  const activity = getCurrentActivity();
+
+  if (!activity.actions.some(action => action.id === state.actionId)) {
+    state.actionId = activity.actions[0]?.id || "";
+  }
+
   els.actionSelect.innerHTML = activity.actions.map(action =>
     `<option value="${action.id}">${action.name}</option>`
   ).join("");
-
-  if (!activity.actions.some(action => action.id === state.actionId)) {
-    state.actionId = activity.actions[0].id;
-  }
-
   els.actionSelect.value = state.actionId;
 }
 
 function populateRituals() {
-  const activity = getActivity();
+  const activity = getCurrentActivity();
   const matching = state.rituals.filter(ritual => ritual.option === activity.name && ritual.id !== "none");
   const all = state.rituals.filter(ritual => ritual.option === "All" && ritual.id !== "none");
 
@@ -206,7 +236,7 @@ function populateRituals() {
 function bindEvents() {
   els.activitySelect.addEventListener("change", event => {
     state.activityId = event.target.value;
-    state.actionId = getActivity().actions[0].id;
+    state.actionId = getCurrentActivity().actions[0]?.id || "";
     state.ritualId = "none";
     populateActions();
     populateRituals();
@@ -218,8 +248,8 @@ function bindEvents() {
     render();
   });
 
-  els.rankSelect.addEventListener("change", event => {
-    state.rank = Number(event.target.value);
+  els.mithrilUpgrade.addEventListener("change", event => {
+    state.mithrilUpgrade = Number(event.target.value);
     render();
   });
 
@@ -234,97 +264,67 @@ function bindEvents() {
   });
 
   els.copySummary.addEventListener("click", copySummary);
-}
 
-function formatSigned(value) {
-  const number = Number(value || 0);
-  return number > 0 ? `+${number}` : String(number);
-}
+  els.actionCards.addEventListener("click", event => {
+    const selectButton = event.target.closest("[data-select-action]");
+    const detailsButton = event.target.closest("[data-show-details]");
 
-function actionTypeLabel(type) {
-  if (type === "loot") return "Loot";
-  if (type === "guerdon") return "Guerdon Eligible";
-  if (type === "venture") return "Venture";
-  return "Narrative";
-}
+    if (selectButton) {
+      state.actionId = selectButton.dataset.selectAction;
+      els.actionSelect.value = state.actionId;
+      render();
+      return;
+    }
 
-function adjustAmount(amount, multiplier, scalable = true) {
-  if (!Number.isFinite(Number(amount))) return amount;
-  const number = Number(amount);
-  if (!scalable || multiplier === 1) return number;
-  if (number === 0) return 0;
-  return Math.max(1, Math.ceil(number * multiplier));
-}
+    if (detailsButton) {
+      openDetails(detailsButton.dataset.showDetails);
+    }
+  });
 
-function formatReward(reward, amount) {
-  if (amount === undefined || amount === null || amount === "") return null;
-  if (Number(amount) === 0) return null;
-  const unit = reward.unit ? ` ${reward.unit}` : "";
-  return `${amount}${unit}`;
-}
-
-function rewardsForAction(action) {
-  const rank = getEffectiveRank();
-  const ritual = getRitual();
-  const multiplier = Number(ritual.productionMultiplier || 1);
-
-  if (Array.isArray(action.rewardsByRank)) {
-    return action.rewardsByRank
-      .map(reward => {
-        const raw = reward.amountByRank?.[String(rank)];
-        const amount = adjustAmount(raw, multiplier, reward.scalable !== false);
-        return {
-          name: reward.name,
-          amount: formatReward(reward, amount)
-        };
-      })
-      .filter(reward => reward.amount);
-  }
-
-  if (Array.isArray(action.rewards)) {
-    return action.rewards
-      .map(reward => {
-        const amount = adjustAmount(reward.amount, multiplier, reward.scalable !== false);
-        return {
-          name: reward.name,
-          amount: formatReward(reward, amount)
-        };
-      })
-      .filter(reward => reward.amount);
-  }
-
-  return [];
+  els.closeDialog.addEventListener("click", () => els.actionDialog.close());
 }
 
 function render() {
-  const activity = getActivity();
-  const action = getAction();
+  const activity = getCurrentActivity();
+  const action = getCurrentAction();
   const ritual = getRitual();
   const effectiveRank = getEffectiveRank();
 
   els.activitySelect.value = state.activityId;
-  els.rankSelect.value = String(state.rank);
+  els.actionSelect.value = state.actionId;
+  els.mithrilUpgrade.value = String(state.mithrilUpgrade);
   els.modifierSelect.value = String(state.modifier);
   els.ritualSelect.value = state.ritualId;
 
+  els.baseUnitRank.textContent = "Level 1 / Rank 5";
   els.ritualNote.textContent = ritual.note || "No ritual selected.";
+  els.listEyebrow.textContent = activity.name;
+  els.actionsHeading.textContent = `${activity.name} assignments`;
 
-  els.breakdown.innerHTML = `
+  renderBreakdown(activity, ritual, effectiveRank);
+  renderOutput(action);
+  renderActionCards(activity.actions);
+}
+
+function renderBreakdown(activity, ritual, effectiveRank) {
+  const multiplier = Number(ritual.productionMultiplier || ritual.multiplier || 1);
+
+  els.modifierBreakdown.innerHTML = `
     <div class="breakdown-row">
       <span>Activity</span>
       <strong>${activity.name}</strong>
     </div>
     <div class="breakdown-row">
-      <span>Action</span>
-      <strong>${action.name}</strong>
-    </div>
-    <div class="breakdown-row">
       <span>Base unit</span>
-      <strong>Level ${getUnitLevel(state.rank)} / Rank ${state.rank}</strong>
+      <strong>Level 1 / Rank ${DEFAULT_BASE_RANK}</strong>
     </div>
     <div class="breakdown-row">
-      <span>Campaign modifier</span>
-      <strong>${formatSigned(state.modifier)}</strong>
+      <span>Mithril permanent upgrade</span>
+      <strong>+${state.mithrilUpgrade}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Campaign buff/debuff</span>
+      <strong>${state.modifier > 0 ? "+" : ""}${state.modifier}</strong>
     </div>
     <div class="breakdown-row">
       <span>Ritual</span>
@@ -332,120 +332,190 @@ function render() {
     </div>
     <div class="breakdown-row">
       <span>Ritual rank change</span>
-      <strong>${formatSigned(ritual.rankModifier)}</strong>
+      <strong>${Number(ritual.rankModifier || 0) > 0 ? "+" : ""}${Number(ritual.rankModifier || 0)}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Production multiplier</span>
+      <strong>${multiplier === 1 ? "×1" : `×${multiplier}`}</strong>
     </div>
     <div class="breakdown-row breakdown-row--total">
       <span>Effective rank</span>
       <strong>${effectiveRank}</strong>
     </div>
   `;
-
-  els.actionType.textContent = actionTypeLabel(action.type);
-  els.actionTitle.textContent = action.name;
-  els.actionDescription.textContent = action.description || "No description provided.";
-
-  renderOutput(action);
 }
 
 function renderOutput(action) {
+  if (!action) {
+    els.productionSummary.innerHTML = `<div class="summary-item"><span>Outcome</span><strong>No action selected</strong></div>`;
+    return;
+  }
+
   if (action.type === "venture") {
-    const rewards = rewardsForAction(action);
-    const restrictionRow = action.restricted ? `
-      <div class="summary-item">
-        <span>Restriction</span>
-        <strong>${action.restricted}</strong>
-      </div>
-    ` : "";
-
-    const rewardRows = rewards.length ? rewards.map(reward => `
-      <div class="summary-item">
-        <span>${reward.name}</span>
-        <strong>${reward.amount}</strong>
-      </div>
-    `).join("") : `
-      <div class="summary-item">
-        <span>Outcome</span>
-        <strong>No income listed for this venture</strong>
-      </div>
+    const rewardRows = getActionRewardRows(action);
+    els.productionSummary.innerHTML = `
+      ${action.restricted ? `
+        <div class="summary-item">
+          <span>Restriction</span>
+          <strong>${action.restricted}</strong>
+        </div>
+      ` : ""}
+      ${rewardRows.length ? rewardRows.map(row => `
+        <div class="summary-item">
+          <span>${row.name}</span>
+          <strong>${row.amount}</strong>
+        </div>
+      `).join("") : `
+        <div class="summary-item">
+          <span>Outcome</span>
+          <strong>Narrative or plot result</strong>
+        </div>
+      `}
     `;
-
-    els.lootOutput.innerHTML = `${restrictionRow}${rewardRows}`;
     return;
   }
 
   if (action.type === "loot") {
     const row = getLootRow();
-    const ritual = getRitual();
-    const multiplier = Number(ritual.productionMultiplier || 1);
-    const baseProduction = Number(row.production || 0);
-    const modifiedProduction = Math.max(1, Math.ceil(baseProduction * multiplier));
-    const resultRow = multiplier === 1 ? row : getLootRowForProduction(modifiedProduction);
-    const productionLabel = multiplier === 1
+    const multiplier = Number(getRitual().productionMultiplier || 1);
+    const production = multiplier === 1
       ? row.label
-      : `${modifiedProduction} random resources after ritual modifier`;
+      : `${Math.ceil(Number(row.production || 0) * multiplier)} random resources after ritual modifier`;
 
-    els.lootOutput.innerHTML = `
-      <div class="summary-item">
-        <span>Production</span>
-        <strong>${productionLabel}</strong>
-      </div>
-      <div class="summary-item">
-        <span>25% Resources</span>
-        <strong>${resultRow.resources}</strong>
-      </div>
-      <div class="summary-item">
-        <span>25% Money</span>
-        <strong>${resultRow.money}</strong>
-      </div>
-      <div class="summary-item">
-        <span>25% Mana</span>
-        <strong>${resultRow.mana}</strong>
-      </div>
-      <div class="summary-item">
-        <span>25% Herbs</span>
-        <strong>${resultRow.herbs}</strong>
-      </div>
+    els.productionSummary.innerHTML = `
+      <div class="summary-item"><span>Production</span><strong>${production}</strong></div>
+      <div class="summary-item"><span>25% Resources</span><strong>${row.resources}</strong></div>
+      <div class="summary-item"><span>25% Money</span><strong>${row.money}</strong></div>
+      <div class="summary-item"><span>25% Mana</span><strong>${row.mana}</strong></div>
+      <div class="summary-item"><span>25% Herbs</span><strong>${row.herbs}</strong></div>
     `;
     return;
   }
 
   if (action.type === "guerdon") {
-    els.lootOutput.innerHTML = `
-      <div class="summary-item">
-        <span>Income</span>
-        <strong>Only if Imperial guerdon applies</strong>
-      </div>
-      <div class="summary-item">
-        <span>Contribution</span>
-        <strong>Effective rank ${getEffectiveRank()}</strong>
-      </div>
-      <div class="summary-item">
-        <span>Note</span>
-        <strong>Adds unit strength to the selected army, fortification, or spy network.</strong>
-      </div>
+    els.productionSummary.innerHTML = `
+      <div class="summary-item"><span>Income</span><strong>Only if Imperial guerdon applies</strong></div>
+      <div class="summary-item"><span>Contribution</span><strong>Effective rank ${getEffectiveRank()}</strong></div>
+      <div class="summary-item"><span>Note</span><strong>Adds unit strength to the selected army, fortification, or spy network.</strong></div>
     `;
     return;
   }
 
-  els.lootOutput.innerHTML = `
-    <div class="summary-item">
-      <span>Outcome</span>
-      <strong>Narrative or plot result</strong>
-    </div>
-    <div class="summary-item">
-      <span>Income</span>
-      <strong>None unless the plot option states otherwise</strong>
+  els.productionSummary.innerHTML = `
+    <div class="summary-item"><span>Outcome</span><strong>Narrative or plot result</strong></div>
+    <div class="summary-item"><span>Income</span><strong>None unless the plot option states otherwise</strong></div>
+  `;
+}
+
+function getActionRewardRows(action, rank = getEffectiveRank()) {
+  const multiplier = Number(getRitual().productionMultiplier || 1);
+  const rows = [];
+
+  if (Array.isArray(action.rewardsByRank)) {
+    action.rewardsByRank.forEach(reward => {
+      const rawAmount = reward.amountByRank?.[String(rank)] ?? reward.amountByRank?.[rank] ?? 0;
+      const amount = reward.scalable === false ? Number(rawAmount) : Math.ceil(Number(rawAmount) * multiplier);
+      if (!amount) return;
+      rows.push({
+        name: reward.name,
+        amount: formatAmount(amount, reward.unit)
+      });
+    });
+  }
+
+  if (Array.isArray(action.rewards)) {
+    action.rewards.forEach(reward => {
+      const amount = reward.scalable === false ? Number(reward.amount || 0) : Math.ceil(Number(reward.amount || 0) * multiplier);
+      if (!amount) return;
+      rows.push({
+        name: reward.name,
+        amount: formatAmount(amount, reward.unit)
+      });
+    });
+  }
+
+  return rows;
+}
+
+function formatAmount(amount, unit) {
+  if (unit) {
+    return `×${amount} ${unit}`;
+  }
+  return `×${amount}`;
+}
+
+function renderActionCards(actions) {
+  els.actionCount.textContent = String(actions.length);
+  els.emptyState.hidden = actions.length > 0;
+
+  els.actionCards.innerHTML = actions.map(action => {
+    const rewardRows = getActionRewardRows(action).slice(0, 4);
+    const selectedClass = action.id === state.actionId ? " selected" : "";
+    const typeLabel = action.type === "guerdon" ? "Guerdon" : action.type === "venture" ? "Venture" : action.type === "loot" ? "Loot" : "Narrative";
+
+    return `
+      <article class="action-card${selectedClass}">
+        <p class="eyebrow">${typeLabel}</p>
+        <h3>${action.name}</h3>
+        <p class="action-meta">${action.restricted || "Available action"}</p>
+        <p class="action-description">${action.description || "No description provided."}</p>
+        <div class="action-rewards">
+          ${rewardRows.length ? rewardRows.map(row => `
+            <div class="reward-row">
+              <span>${row.name}</span>
+              <strong>${row.amount}</strong>
+            </div>
+          `).join("") : `
+            <span class="badge">${typeLabel}</span>
+          `}
+        </div>
+        <div class="action-card__actions">
+          <button class="select-action-button" type="button" data-select-action="${action.id}">${action.id === state.actionId ? "Selected" : "Select"}</button>
+          <button class="details-button" type="button" data-show-details="${action.id}">Details</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function openDetails(actionId) {
+  const activity = getCurrentActivity();
+  const action = activity.actions.find(item => item.id === actionId);
+  if (!action) return;
+
+  const rewardRows = getActionRewardRows(action);
+  const typeLabel = action.type === "guerdon" ? "Guerdon Eligible" : action.type === "venture" ? "Venture" : action.type === "loot" ? "Loot" : "Narrative";
+
+  els.dialogContent.innerHTML = `
+    <p class="eyebrow">${activity.name}</p>
+    <h2>${action.name}</h2>
+    <p class="subtitle" style="color: var(--ink-soft);">${typeLabel} shown for effective rank ${getEffectiveRank()}.</p>
+    <p>${action.description || "No description provided."}</p>
+    ${action.restricted ? `<p><strong>Restriction:</strong> ${action.restricted}</p>` : ""}
+    <div class="summary-list">
+      ${rewardRows.length ? rewardRows.map(row => `
+        <div class="summary-item">
+          <span>${row.name}</span>
+          <strong>${row.amount}</strong>
+        </div>
+      `).join("") : `
+        <div class="summary-item">
+          <span>Outcome</span>
+          <strong>${typeLabel}</strong>
+        </div>
+      `}
     </div>
   `;
+
+  els.actionDialog.showModal();
 }
 
 function getSummaryLines() {
   const character = els.characterName.value.trim() || "Not provided";
   const unit = els.unitName.value.trim() || "Not provided";
-  const activity = getActivity();
-  const action = getAction();
+  const activity = getCurrentActivity();
+  const action = getCurrentAction();
   const ritual = getRitual();
-  const effectiveRank = getEffectiveRank();
 
   const lines = [
     "Empire Military Downtime Tool",
@@ -455,11 +525,11 @@ function getSummaryLines() {
     "",
     `Activity: ${activity.name}`,
     `Action: ${action.name}`,
-    `Base Unit: Level ${getUnitLevel(state.rank)} / Rank ${state.rank}`,
-    `Campaign Modifier: ${formatSigned(state.modifier)}`,
+    `Base Unit: Level 1 / Rank ${DEFAULT_BASE_RANK}`,
+    `Mithril Upgrade: +${state.mithrilUpgrade}`,
+    `Campaign Modifier: ${state.modifier > 0 ? "+" : ""}${state.modifier}`,
     `Ritual: ${ritual.name}`,
-    `Ritual Rank Change: ${formatSigned(ritual.rankModifier)}`,
-    `Effective Rank: ${effectiveRank}`,
+    `Effective Rank: ${getEffectiveRank()}`,
     "",
     "Downtime Result:"
   ];
@@ -468,31 +538,24 @@ function getSummaryLines() {
     if (action.restricted) {
       lines.push(`Restriction: ${action.restricted}`);
     }
-    const rewards = rewardsForAction(action);
-    if (rewards.length) {
-      rewards.forEach(reward => lines.push(`${reward.name}: ${reward.amount}`));
+    const rewardRows = getActionRewardRows(action);
+    if (rewardRows.length) {
+      rewardRows.forEach(row => lines.push(`${row.name}: ${row.amount}`));
     } else {
-      lines.push("Outcome: No income listed for this venture.");
+      lines.push("Outcome: Narrative or plot result.");
     }
   } else if (action.type === "loot") {
     const row = getLootRow();
-    const multiplier = Number(ritual.productionMultiplier || 1);
-    const baseProduction = Number(row.production || 0);
-    const modifiedProduction = Math.max(1, Math.ceil(baseProduction * multiplier));
-    const resultRow = multiplier === 1 ? row : getLootRowForProduction(modifiedProduction);
-    const productionLabel = multiplier === 1 ? row.label : `${modifiedProduction} random resources after ritual modifier`;
-
-    lines.push(`Production: ${productionLabel}`);
-    lines.push(`25% Resources: ${resultRow.resources}`);
-    lines.push(`25% Money: ${resultRow.money}`);
-    lines.push(`25% Mana: ${resultRow.mana}`);
-    lines.push(`25% Herbs: ${resultRow.herbs}`);
+    lines.push(`Production: ${row.label}`);
+    lines.push(`25% Resources: ${row.resources}`);
+    lines.push(`25% Money: ${row.money}`);
+    lines.push(`25% Mana: ${row.mana}`);
+    lines.push(`25% Herbs: ${row.herbs}`);
   } else if (action.type === "guerdon") {
     lines.push("Income: Only if Imperial guerdon applies.");
-    lines.push(`Contribution: Effective rank ${effectiveRank}.`);
+    lines.push(`Contribution: Effective rank ${getEffectiveRank()}.`);
   } else {
     lines.push("Outcome: Narrative or plot result.");
-    lines.push("Income: None unless the plot option states otherwise.");
   }
 
   return lines;
@@ -512,9 +575,8 @@ init().catch(error => {
   console.error(error);
   document.body.insertAdjacentHTML(
     "afterbegin",
-    `<p style="background:#ffd6d6;color:#4a0000;padding:1rem;margin:0;position:relative;z-index:5;">
-      Military tool error:<br>
-      ${error.message}
+    `<p style="background:#ffd6d6;color:#4a0000;padding:1rem;margin:0;position:relative;z-index:10;">
+      Military tool error:<br>${error.message}
     </p>`
   );
 });
