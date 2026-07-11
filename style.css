@@ -31,31 +31,31 @@ body {
   min-height: 100vh;
   color: var(--ink);
   font-family: var(--body-font);
-  background-color: #2a1a11;
+  background-color: var(--campaign-dark);
   background-image:
-    linear-gradient(rgba(31, 18, 10, .22), rgba(31, 18, 10, .22)),
+    linear-gradient(rgba(18, 7, 9, 0.34), rgba(18, 7, 9, 0.34)),
     repeating-linear-gradient(90deg, transparent 0 78px, rgba(255,255,255,.018) 79px 80px),
-    repeating-linear-gradient(0deg, transparent 0 54px, rgba(0,0,0,.04) 55px 56px),
-    radial-gradient(circle at 50% 0, #59402a 0, #322015 55%, #21140d 100%);
+    repeating-linear-gradient(0deg, transparent 0 54px, rgba(0,0,0,.06) 55px 56px),
+    radial-gradient(circle at 50% 0, #4b151b 0, #261014 55%, #12080a 100%);
 }
 
 button, input, select { font: inherit; }
 button { border: 0; }
 
-.hero {
+.site-header {
   position: relative;
   padding: 48px 20px 34px;
   color: #f4e6c4;
   text-align: center;
   background:
-    linear-gradient(rgba(35,18,8,.52), rgba(35,18,8,.72)),
-    radial-gradient(circle at center, #72502d 0, #3e2717 58%, #24150d 100%);
-  border-bottom: 5px double var(--gold);
-  box-shadow: 0 8px 20px rgba(0,0,0,.45);
+    linear-gradient(rgba(32, 8, 12, .56), rgba(22, 6, 8, .78)),
+    radial-gradient(circle at center, #5a171d 0, #2b0f13 58%, #14080a 100%);
+  border-bottom: 5px double var(--steel);
+  box-shadow: 0 8px 20px rgba(0,0,0,.55);
 }
 
-.hero::before,
-.hero::after {
+.site-header::before,
+.site-header::after {
   content: "❦";
   position: absolute;
   top: 22px;
@@ -63,10 +63,8 @@ button { border: 0; }
   font-size: 2rem;
   opacity: .85;
 }
-.hero::before { left: max(18px, calc(50% - 390px)); }
-.hero::after { right: max(18px, calc(50% - 390px)); transform: scaleX(-1); }
-
-.hero__content { max-width: 950px; margin: 0 auto; }
+.site-header::before { left: max(18px, calc(50% - 390px)); }
+.site-header::after { right: max(18px, calc(50% - 390px)); transform: scaleX(-1); }
 
 .eyebrow {
   margin: 0 0 8px;
@@ -85,7 +83,7 @@ h1 {
   font-weight: 400;
   letter-spacing: .01em;
   color: #f7e8bd;
-  text-shadow: 0 2px 0 #39200f, 0 4px 8px rgba(0,0,0,.65);
+  text-shadow: 0 2px 0 #2b0b0e, 0 4px 8px rgba(0,0,0,.75), 0 0 12px rgba(216, 222, 226, .18);
 }
 
 h2 {
@@ -103,7 +101,7 @@ h3 {
 }
 
 .subtitle {
-  max-width: 800px;
+  max-width: 850px;
   margin: 15px auto 0;
   color: #ddcda7;
   font-size: 1.02rem;
@@ -116,23 +114,27 @@ h3 {
   padding: 28px 0 60px;
 }
 
+.panel,
+.action-card,
+.action-dialog {
+  position: relative;
+  background-color: var(--parchment);
+  background-image:
+    radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
+    repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px);
+  border: 1px solid var(--steel-dark);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 3px rgba(255,244,204,.45), 0 0 0 2px rgba(143,154,161,.28), var(--shadow);
+}
 
-.action-card::before,
-.military-panel::before,
-.controls-panel::before {
+.action-card::before {
   content: "";
   position: absolute;
   inset: 6px;
   pointer-events: none;
   border: 1px solid rgba(79,90,97,.38);
 }
-.planner-layout::before,
-.actions-section::before,
-.app-shell::before {
-  content: none !important;
-  display: none !important;
-  border: 0 !important;
-}
+
 .controls-panel { padding: 25px; margin-bottom: 24px; overflow: hidden; }
 
 .section-title-row {
@@ -408,120 +410,11 @@ button:active { transform: translateY(0); }
   .action-card__actions { flex-direction: column; }
 }
 
-.kofi-button {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border: 2px solid #7a3e1d;
-  border-radius: 6px;
-  background: #6b3f24;
-  color: #fff3d1;
-  font-weight: 700;
-  text-decoration: none;
-  text-align: center;
-}
 
-.kofi-button:hover {
-  background: #8a4f2a;
-}
-/* --- Emergency parchment background restore --- */
-
-.panel,
-.controls-panel,
-.planner-card,
-.result-panel,
-.action-card,
-.port-card,
-.assignment-card,
-.military-card,
-.dialog,
-.port-dialog {
-  background-color: var(--parchment) !important;
-  background-image:
-    radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
-    repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px) !important;
-  color: var(--ink) !important;
-  border: 1px solid var(--steel-dark) !important;
-  box-shadow:
-    inset 0 0 0 3px rgba(255,244,204,.45),
-    0 0 0 2px rgba(143,154,161,.28),
-    var(--shadow) !important;
-}
-
-.action-card *,
-.port-card *,
-.assignment-card *,
-.military-card *,
-.planner-card *,
-.result-panel * {
-  color: inherit;
-}
-
-.action-card h3,
-.port-card h3,
-.assignment-card h3,
-.military-card h3,
-.planner-card h2,
-.result-panel h2,
-.summary-box h3 {
-  color: var(--red) !important;
-}
-
-.action-card .eyebrow,
-.port-card .eyebrow,
-.assignment-card .eyebrow,
-.military-card .eyebrow {
-  color: var(--gold) !important;
-}
-
-.action-card p,
-.port-card p,
-.assignment-card p,
-.military-card p,
-.action-description,
-.action-restriction {
-  color: var(--ink-soft) !important;
-}
-
-.summary-item,
-.material-row,
-.loot-row {
-  background: rgba(255,247,220,.66) !important;
-  color: var(--ink) !important;
-  border: 1px solid rgba(91,62,33,.24) !important;
-}
-
-.summary-item strong,
-.material-row strong,
-.loot-row strong {
-  color: var(--red) !important;
-}
-
-.modifier-breakdown {
-  background: rgba(255,247,220,.52) !important;
-  color: var(--ink) !important;
-  border: 1px solid var(--line) !important;
-}
-
-.breakdown-row {
-  color: var(--ink-soft) !important;
-}
-
-.breakdown-row strong {
-  color: var(--ink) !important;
-}
-/* Remove stray outer layout box */
-.panel,
-.controls-panel,
-.planner-card,
-.result-panel,
-.action-card,
-.port-card,
-.assignment-card,
-.military-card,
-.dialog,
-.port-dialog,
-.action-dialog {
+/* --- Final export cleanup --- */
+.planner-layout,
+.actions-section,
+.app-shell {
   border: 0 !important;
   outline: 0 !important;
   box-shadow: none !important;
@@ -529,29 +422,29 @@ button:active { transform: translateY(0); }
 
 .planner-layout::before,
 .actions-section::before,
-.app-shell::before {
+.app-shell::before,
+.panel::before {
   content: none !important;
   display: none !important;
+  border: 0 !important;
 }
-/* Fix stray dialog border/box */
+
 .action-dialog:not([open]) {
   display: none !important;
 }
 
 .action-dialog {
-  border: 0 !important;
+  border: 1px solid var(--steel-dark) !important;
   outline: 0 !important;
-  box-shadow: none;
 }
 
 .action-dialog[open] {
-  border: 1px solid var(--steel-dark) !important;
-  outline: none !important;
   background-color: var(--parchment) !important;
   background-image:
     radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
     repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px) !important;
   box-shadow:
     inset 0 0 0 3px rgba(255,244,204,.45),
+    0 0 0 2px rgba(143,154,161,.28),
     var(--shadow) !important;
 }
