@@ -366,7 +366,7 @@ function getSummaryLines() {
     "",
     `Activity: ${activity.name}`,
     `Action: ${action.name}`,
-    `Base Rank: ${state.rank}`,
+    `Base Unit: Level ${state.rank - 4} / Rank ${state.rank}`,
     `Campaign Modifier: ${formatSigned(state.modifier)}`,
     `Ritual: ${ritual.name}`,
     `Ritual Rank Change: ${formatSigned(ritual.rankModifier)}`,
