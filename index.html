@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empire Military Downtime Tool</title>
-  <meta name="description" content="Starter military downtime planner for Empire military units." />
-  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="Military downtime planner for Empire military units." />
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,67 +16,86 @@
   </header>
 
   <main class="app-shell">
-  <section class="panel controls-panel">
-    <div class="controls-grid">
-      <label class="control">
-        <span>Military Activity</span>
-        <select id="activitySelect"></select>
-      </label>
-
-      <label class="control">
-        <span>Military Action</span>
-        <select id="actionSelect"></select>
-      </label>
-
-      <label class="control">
-        <span>Unit Rank</span>
-        <select id="rankSelect"></select>
-      </label>
-
-      <label class="control">
-        <span>Campaign Buff/Debuff</span>
-        <select id="modifierSelect"></select>
-      </label>
-
-      <label class="control control--wide">
-        <span>Military Enchantment / Ritual</span>
-        <select id="ritualSelect"></select>
-      </label>
-    </div>
-
-    <p id="ritualNote" class="note">No ritual selected.</p>
-  </section>
-
-  <aside class="planner-card result-panel">
-    <div class="planner-card-header">
-      <div>
-        <p class="eyebrow">Planner</p>
-        <h2>Military Unit</h2>
+    <section class="panel controls-panel" aria-labelledby="controls-heading">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Orders</p>
+          <h2 id="controls-heading">Downtime action</h2>
+        </div>
       </div>
 
-      <button id="copySummary" type="button" class="copy-button">Copy summary</button>
-    </div>
+      <div class="controls-grid">
+        <label class="control">
+          <span>Military Activity</span>
+          <select id="activitySelect"></select>
+        </label>
 
-    <label class="control">
-      <span>Character Name</span>
-      <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
-    </label>
+        <label class="control">
+          <span>Military Action</span>
+          <select id="actionSelect"></select>
+        </label>
 
-    <label class="control">
-      <span>Unit Name</span>
-      <input id="unitName" type="text" placeholder="e.g. Hearthguard" />
-    </label>
+        <label class="control">
+          <span>Unit Rank</span>
+          <select id="rankSelect"></select>
+        </label>
 
-    <div class="modifier-breakdown" id="modifierBreakdown"></div>
+        <label class="control">
+          <span>Campaign Buff/Debuff</span>
+          <select id="modifierSelect"></select>
+        </label>
 
-    <div class="summary-box">
-      <h3>Downtime result</h3>
-      <div id="productionSummary" class="summary-list"></div>
-    </div>
-  </aside>
-</main>
+        <label class="control control--wide">
+          <span>Military Enchantment / Ritual</span>
+          <select id="ritualSelect"></select>
+        </label>
+      </div>
+
+      <p id="ritualNote" class="ritual-note">No ritual selected.</p>
+    </section>
+
+    <section class="planner-layout">
+      <section class="panel action-panel" aria-labelledby="action-heading">
+        <p class="eyebrow" id="actionType">Loot</p>
+        <h2 id="actionTitle">Military action</h2>
+        <p id="actionDescription" class="subtitle">Choose a military action to see the result.</p>
+
+        <div class="info-box">
+          <h3>Random resources</h3>
+          <p>Loot gives a 25% chance of receiving resources, money, mana, or herbs. The table shows what you can expect for the effective rank.</p>
+        </div>
+      </section>
+
+      <aside class="planner-card result-panel" aria-labelledby="summary-heading">
+        <div class="planner-card-header">
+          <div>
+            <p class="eyebrow">Planner</p>
+            <h2 id="summary-heading">Military Unit</h2>
+          </div>
+
+          <button id="copySummary" type="button" class="copy-button">Copy summary</button>
+        </div>
+
+        <label class="control">
+          <span>Character Name</span>
+          <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
+        </label>
+
+        <label class="control">
+          <span>Unit Name</span>
+          <input id="unitName" type="text" placeholder="e.g. Bloodforge Company" />
+        </label>
+
+        <div class="modifier-breakdown" id="modifierBreakdown"></div>
+
+        <div class="summary-box">
+          <h3>Downtime result</h3>
+          <div id="productionSummary" class="summary-list"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
 
   <script src="script.js" defer></script>
 </body>
 </html>
-<!-- trigger GitHub Pages deploy -->

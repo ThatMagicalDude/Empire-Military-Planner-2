@@ -17,7 +17,6 @@ const els = {
   modifierSelect: document.querySelector("#modifierSelect"),
   ritualSelect: document.querySelector("#ritualSelect"),
   ritualNote: document.querySelector("#ritualNote"),
-  effectiveRank: document.querySelector("#effectiveRank"),
   breakdown: document.querySelector("#modifierBreakdown"),
   copySummary: document.querySelector("#copySummary"),
   actionType: document.querySelector("#actionType"),
@@ -27,26 +26,53 @@ const els = {
 };
 
 function slug(value) {
-  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function requiredElementsExist() {
+  const required = [
+    "characterName",
+    "unitName",
+    "activitySelect",
+    "actionSelect",
+    "rankSelect",
+    "modifierSelect",
+    "ritualSelect",
+    "ritualNote",
+    "breakdown",
+    "copySummary",
+    "actionType",
+    "actionTitle",
+    "actionDescription",
+    "lootOutput"
+  ];
+
+  const missing = required.filter(key => !els[key]);
+  if (missing.length) {
+    throw new Error(`Missing required HTML element(s): ${missing.join(", ")}`);
+  }
+}
+
+async function loadJson(path) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`${path} failed to load: ${response.status}`);
+  }
+  return response.json();
 }
 
 async function init() {
-const [optionsResponse, ritualsResponse] = await Promise.all([
-  fetch("./military-options.json"),
-  fetch("./military-rituals.json")
-]);
+  requiredElementsExist();
 
-if (!optionsResponse.ok) {
-  throw new Error(`military-options.json failed to load: ${optionsResponse.status}`);
-}
+  const [optionsData, ritualData] = await Promise.all([
+    loadJson("./military-options.json"),
+    loadJson("./military-rituals.json")
+  ]);
 
-if (!ritualsResponse.ok) {
-  throw new Error(`military-rituals.json failed to load: ${ritualsResponse.status}`);
-}
-
-state.data = await optionsResponse.json();
-const ritualData = await ritualsResponse.json();
-
+  state.data = optionsData;
   state.rituals = [
     {
       id: "none",
@@ -56,7 +82,14 @@ const ritualData = await ritualsResponse.json();
       productionMultiplier: 1,
       note: "No ritual selected."
     },
-    ...ritualData.rituals
+    ...(ritualData.rituals || []).map(ritual => ({
+      id: ritual.id || slug(ritual.name),
+      name: ritual.name,
+      option: ritual.option || "All",
+      rankModifier: Number(ritual.rankModifier || 0),
+      productionMultiplier: Number(ritual.productionMultiplier || 1),
+      note: ritual.note || ""
+    }))
   ];
 
   populateControls();
@@ -77,15 +110,23 @@ function getRitual() {
   return state.rituals.find(ritual => ritual.id === state.ritualId) || state.rituals[0];
 }
 
+function getMaxRank() {
+  return Number(state.data.maxRank || 8);
+}
+
 function getEffectiveRank() {
   const ritual = getRitual();
   const raw = state.rank + state.modifier + Number(ritual.rankModifier || 0);
-  return Math.max(1, Math.min(Number(state.data.maxRank || 8), raw));
+  return Math.max(1, Math.min(getMaxRank(), raw));
 }
 
-function getLootRow() {
-  const effectiveRank = getEffectiveRank();
-  return state.data.lootTable.find(row => Number(row.rank) === effectiveRank) || state.data.lootTable[0];
+function getLootRow(rank = getEffectiveRank()) {
+  return state.data.lootTable.find(row => Number(row.rank) === Number(rank)) || state.data.lootTable[0];
+}
+
+function getLootRowForProduction(production) {
+  const rows = [...state.data.lootTable].sort((a, b) => Number(a.production) - Number(b.production));
+  return rows.find(row => Number(row.production) >= production) || rows[rows.length - 1];
 }
 
 function populateControls() {
@@ -94,7 +135,7 @@ function populateControls() {
   ).join("");
 
   els.rankSelect.innerHTML = "";
-  for (let i = 1; i <= Number(state.data.maxRank || 8); i += 1) {
+  for (let i = 1; i <= getMaxRank(); i += 1) {
     els.rankSelect.insertAdjacentHTML("beforeend", `<option value="${i}">Rank ${i}</option>`);
   }
 
@@ -123,7 +164,7 @@ function populateActions() {
 
 function populateRituals() {
   const activity = getActivity();
-  const matching = state.rituals.filter(ritual => ritual.option === activity.name);
+  const matching = state.rituals.filter(ritual => ritual.option === activity.name && ritual.id !== "none");
   const all = state.rituals.filter(ritual => ritual.option === "All" && ritual.id !== "none");
 
   const optionHtml = [
@@ -178,6 +219,11 @@ function bindEvents() {
   els.copySummary.addEventListener("click", copySummary);
 }
 
+function formatSigned(value) {
+  const number = Number(value || 0);
+  return number > 0 ? `+${number}` : String(number);
+}
+
 function render() {
   const activity = getActivity();
   const action = getAction();
@@ -189,44 +235,42 @@ function render() {
   els.modifierSelect.value = String(state.modifier);
   els.ritualSelect.value = state.ritualId;
 
-  if (els.ritualNote) {
-  els.ritualNote.textContent = ritual.note;
-}
+  els.ritualNote.textContent = ritual.note || "No ritual selected.";
 
-if (els.effectiveRank) {
-  els.effectiveRank.textContent = effectiveRank;
-}
   els.breakdown.innerHTML = `
-  <div class="breakdown-row">
-    <span>Activity</span>
-    <strong>${activity.name}</strong>
-  </div>
-  <div class="breakdown-row">
-    <span>Base rank</span>
-    <strong>${state.rank}</strong>
-  </div>
-  <div class="breakdown-row">
-    <span>Campaign modifier</span>
-    <strong>${state.modifier > 0 ? "+" : ""}${state.modifier}</strong>
-  </div>
-  <div class="breakdown-row">
-    <span>Ritual</span>
-    <strong>${ritual.name}</strong>
-  </div>
-  <div class="breakdown-row">
-    <span>Ritual rank change</span>
-    <strong>${ritual.rankModifier > 0 ? "+" : ""}${ritual.rankModifier}</strong>
-  </div>
-  <div class="breakdown-row breakdown-row--total">
-    <span>Effective rank</span>
-    <strong>${effectiveRank}</strong>
-  </div>
-`;
-
+    <div class="breakdown-row">
+      <span>Activity</span>
+      <strong>${activity.name}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Action</span>
+      <strong>${action.name}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Base rank</span>
+      <strong>${state.rank}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Campaign modifier</span>
+      <strong>${formatSigned(state.modifier)}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Ritual</span>
+      <strong>${ritual.name}</strong>
+    </div>
+    <div class="breakdown-row">
+      <span>Ritual rank change</span>
+      <strong>${formatSigned(ritual.rankModifier)}</strong>
+    </div>
+    <div class="breakdown-row breakdown-row--total">
+      <span>Effective rank</span>
+      <strong>${effectiveRank}</strong>
+    </div>
+  `;
 
   els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
   els.actionTitle.textContent = action.name;
-  els.actionDescription.textContent = action.description;
+  els.actionDescription.textContent = action.description || "No description provided.";
 
   renderOutput(action);
 }
@@ -234,61 +278,67 @@ if (els.effectiveRank) {
 function renderOutput(action) {
   if (action.type === "loot") {
     const row = getLootRow();
-    const multiplier = Number(getRitual().productionMultiplier || 1);
-    const productionLabel = multiplier === 1 ? row.label : `${Math.ceil(row.production * multiplier)} random resources after ritual modifier`;
+    const ritual = getRitual();
+    const multiplier = Number(ritual.productionMultiplier || 1);
+    const baseProduction = Number(row.production || 0);
+    const modifiedProduction = Math.max(1, Math.ceil(baseProduction * multiplier));
+    const resultRow = multiplier === 1 ? row : getLootRowForProduction(modifiedProduction);
+    const productionLabel = multiplier === 1
+      ? row.label
+      : `${modifiedProduction} random resources after ritual modifier`;
 
     els.lootOutput.innerHTML = `
-  <div class="summary-item">
-    <span>Production</span>
-    <strong>${productionLabel}</strong>
-  </div>
-  <div class="summary-item">
-    <span>25% Resources</span>
-    <strong>${row.resources}</strong>
-  </div>
-  <div class="summary-item">
-    <span>25% Money</span>
-    <strong>${row.money}</strong>
-  </div>
-  <div class="summary-item">
-    <span>25% Mana</span>
-    <strong>${row.mana}</strong>
-  </div>
-  <div class="summary-item">
-    <span>25% Herbs</span>
-    <strong>${row.herbs}</strong>
-  </div>
-`;
+      <div class="summary-item">
+        <span>Production</span>
+        <strong>${productionLabel}</strong>
+      </div>
+      <div class="summary-item">
+        <span>25% Resources</span>
+        <strong>${resultRow.resources}</strong>
+      </div>
+      <div class="summary-item">
+        <span>25% Money</span>
+        <strong>${resultRow.money}</strong>
+      </div>
+      <div class="summary-item">
+        <span>25% Mana</span>
+        <strong>${resultRow.mana}</strong>
+      </div>
+      <div class="summary-item">
+        <span>25% Herbs</span>
+        <strong>${resultRow.herbs}</strong>
+      </div>
+    `;
     return;
   }
 
   if (action.type === "guerdon") {
     els.lootOutput.innerHTML = `
-  <div class="summary-item">
-    <span>Income</span>
-    <strong>Only if Imperial guerdon applies</strong>
-  </div>
-  <div class="summary-item">
-    <span>Contribution</span>
-    <strong>Effective rank ${getEffectiveRank()}</strong>
-  </div>
-  <div class="summary-item">
-    <span>Note</span>
-    <strong>Adds unit strength to the selected army, fortification, or spy network.</strong>
-  </div>
-`;
+      <div class="summary-item">
+        <span>Income</span>
+        <strong>Only if Imperial guerdon applies</strong>
+      </div>
+      <div class="summary-item">
+        <span>Contribution</span>
+        <strong>Effective rank ${getEffectiveRank()}</strong>
+      </div>
+      <div class="summary-item">
+        <span>Note</span>
+        <strong>Adds unit strength to the selected army, fortification, or spy network.</strong>
+      </div>
+    `;
     return;
   }
 
   els.lootOutput.innerHTML = `
-  <div class="summary-item">
-    <span>Outcome</span>
-    <strong>Narrative or plot result</strong>
-  </div>
-  <div class="summary-item">
-    <span>Income</span>
-    <strong>None unless the plot option states otherwise</strong>
-  </div>
+    <div class="summary-item">
+      <span>Outcome</span>
+      <strong>Narrative or plot result</strong>
+    </div>
+    <div class="summary-item">
+      <span>Income</span>
+      <strong>None unless the plot option states otherwise</strong>
+    </div>
   `;
 }
 
@@ -298,6 +348,7 @@ function getSummaryLines() {
   const activity = getActivity();
   const action = getAction();
   const ritual = getRitual();
+  const effectiveRank = getEffectiveRank();
 
   const lines = [
     "Empire Military Downtime Tool",
@@ -308,25 +359,33 @@ function getSummaryLines() {
     `Activity: ${activity.name}`,
     `Action: ${action.name}`,
     `Base Rank: ${state.rank}`,
-    `Campaign Modifier: ${state.modifier > 0 ? "+" : ""}${state.modifier}`,
+    `Campaign Modifier: ${formatSigned(state.modifier)}`,
     `Ritual: ${ritual.name}`,
-    `Effective Rank: ${getEffectiveRank()}`,
+    `Ritual Rank Change: ${formatSigned(ritual.rankModifier)}`,
+    `Effective Rank: ${effectiveRank}`,
     "",
     "Downtime Result:"
   ];
 
   if (action.type === "loot") {
     const row = getLootRow();
-    lines.push(`Production: ${row.label}`);
-    lines.push(`25% Resources: ${row.resources}`);
-    lines.push(`25% Money: ${row.money}`);
-    lines.push(`25% Mana: ${row.mana}`);
-    lines.push(`25% Herbs: ${row.herbs}`);
+    const multiplier = Number(ritual.productionMultiplier || 1);
+    const baseProduction = Number(row.production || 0);
+    const modifiedProduction = Math.max(1, Math.ceil(baseProduction * multiplier));
+    const resultRow = multiplier === 1 ? row : getLootRowForProduction(modifiedProduction);
+    const productionLabel = multiplier === 1 ? row.label : `${modifiedProduction} random resources after ritual modifier`;
+
+    lines.push(`Production: ${productionLabel}`);
+    lines.push(`25% Resources: ${resultRow.resources}`);
+    lines.push(`25% Money: ${resultRow.money}`);
+    lines.push(`25% Mana: ${resultRow.mana}`);
+    lines.push(`25% Herbs: ${resultRow.herbs}`);
   } else if (action.type === "guerdon") {
     lines.push("Income: Only if Imperial guerdon applies.");
-    lines.push(`Contribution: Effective rank ${getEffectiveRank()}.`);
+    lines.push(`Contribution: Effective rank ${effectiveRank}.`);
   } else {
     lines.push("Outcome: Narrative or plot result.");
+    lines.push("Income: None unless the plot option states otherwise.");
   }
 
   return lines;
@@ -344,5 +403,11 @@ async function copySummary() {
 
 init().catch(error => {
   console.error(error);
-  document.body.insertAdjacentHTML("afterbegin", `<p style="background:#ffd6d6;color:#4a0000;padding:1rem;">Could not load military data files. Check that military-options.json and military-rituals.json are uploaded beside index.html.</p>`);
+  document.body.insertAdjacentHTML(
+    "afterbegin",
+    `<p style="background:#ffd6d6;color:#4a0000;padding:1rem;margin:0;position:relative;z-index:5;">
+      Military tool error:<br>
+      ${error.message}
+    </p>`
+  );
 });
