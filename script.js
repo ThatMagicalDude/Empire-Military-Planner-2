@@ -1,9 +1,12 @@
+const DEFAULT_UNIT_RANK = 5;
+const MIN_UNIT_RANK = 1;
+
 const state = {
   data: null,
   rituals: [],
   activityId: "guarding",
   actionId: "mercenary-work",
-  rank: 1,
+  rank: DEFAULT_UNIT_RANK,
   modifier: 0,
   ritualId: "none"
 };
