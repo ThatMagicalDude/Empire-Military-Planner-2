@@ -120,7 +120,7 @@ function getMaxRank() {
 function getEffectiveRank() {
   const ritual = getRitual();
   const raw = state.rank + state.modifier + Number(ritual.rankModifier || 0);
-  return Math.max(1, Math.min(getMaxRank(), raw));
+  return Math.max(MIN_UNIT_RANK, Math.min(Number(state.data.maxRank || 18), raw));
 }
 
 function getLootRow(rank = getEffectiveRank()) {
@@ -138,9 +138,14 @@ function populateControls() {
   ).join("");
 
   els.rankSelect.innerHTML = "";
-  for (let i = 1; i <= getMaxRank(); i += 1) {
-    els.rankSelect.insertAdjacentHTML("beforeend", `<option value="${i}">Rank ${i}</option>`);
-  }
+
+for (let i = 5; i <= Number(state.data.maxRank || 18); i += 1) {
+  const level = i - 4;
+  els.rankSelect.insertAdjacentHTML(
+    "beforeend",
+    `<option value="${i}">Level ${level} — Rank ${i}</option>`
+  );
+}
 
   els.modifierSelect.innerHTML = "";
   for (let i = -5; i <= 5; i += 1) {
@@ -242,9 +247,9 @@ function render() {
 
   els.breakdown.innerHTML = `
     <div class="breakdown-row">
-      <span>Activity</span>
-      <strong>${activity.name}</strong>
-    </div>
+  <span>Base unit</span>
+  <strong>Level ${state.rank - 4} / Rank ${state.rank}</strong>
+</div>
     <div class="breakdown-row">
       <span>Action</span>
       <strong>${action.name}</strong>
@@ -265,10 +270,10 @@ function render() {
       <span>Ritual rank change</span>
       <strong>${formatSigned(ritual.rankModifier)}</strong>
     </div>
-    <div class="breakdown-row breakdown-row--total">
-      <span>Effective rank</span>
-      <strong>${effectiveRank}</strong>
-    </div>
+  <div class="breakdown-row breakdown-row--total">
+  <span>Effective rank</span>
+  <strong>${effectiveRank}</strong>
+</div>
   `;
 
   els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
