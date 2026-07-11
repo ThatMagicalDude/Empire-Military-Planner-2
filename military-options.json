@@ -1,85 +1,177 @@
 {
-  "version": "starter-1.0",
+  "version": "military-ventures-1.1",
   "maxRank": 18,
+  "defaultRank": 5,
+  "minRank": 1,
   "lootTable": [
     {
       "rank": 1,
+      "production": 2,
+      "label": "2 random resources",
+      "resources": "2 ingots or measures",
+      "money": "36 rings",
+      "mana": "about 1 mana crystals",
+      "herbs": "about 2 herbs"
+    },
+    {
+      "rank": 2,
       "production": 4,
       "label": "4 random resources",
       "resources": "4 ingots or measures",
       "money": "72 rings",
-      "mana": "3 mana crystals",
-      "herbs": "3 True Vervain, 1 Cerulean Mazzarine, 1 Bladeroot, 1 Imperial Roseweald, 1 Marrowort"
+      "mana": "about 3 mana crystals",
+      "herbs": "about 4 herbs"
     },
     {
-      "rank": 2,
+      "rank": 3,
       "production": 6,
       "label": "6 random resources",
       "resources": "6 ingots or measures",
       "money": "108 rings",
-      "mana": "4 mana crystals",
-      "herbs": "4 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+      "mana": "about 4 mana crystals",
+      "herbs": "about 6 herbs"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "production": 8,
       "label": "8 random resources",
       "resources": "8 ingots or measures",
       "money": "144 rings",
-      "mana": "6 mana crystals",
-      "herbs": "5 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+      "mana": "about 6 mana crystals",
+      "herbs": "about 8 herbs"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "production": 10,
       "label": "10 random resources",
       "resources": "10 ingots or measures",
       "money": "180 rings",
-      "mana": "7 mana crystals",
-      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+      "mana": "about 7 mana crystals",
+      "herbs": "about 10 herbs"
     },
     {
-      "rank": 5,
+      "rank": 6,
       "production": 12,
       "label": "12 random resources",
       "resources": "12 ingots or measures",
       "money": "216 rings",
-      "mana": "8 mana crystals",
-      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 2 random herbs"
+      "mana": "about 9 mana crystals",
+      "herbs": "about 12 herbs"
     },
     {
-      "rank": 6,
+      "rank": 7,
       "production": 14,
       "label": "14 random resources",
       "resources": "14 ingots or measures",
       "money": "252 rings",
-      "mana": "10 mana crystals",
-      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 4 random herbs"
+      "mana": "about 10 mana crystals",
+      "herbs": "about 14 herbs"
     },
     {
-      "rank": 7,
+      "rank": 8,
       "production": 16,
       "label": "16 random resources",
       "resources": "16 ingots or measures",
       "money": "288 rings",
-      "mana": "11 mana crystals",
-      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 6 random herbs"
+      "mana": "about 12 mana crystals",
+      "herbs": "about 16 herbs"
     },
     {
-      "rank": 8,
+      "rank": 9,
       "production": 18,
       "label": "18 random resources",
       "resources": "18 ingots or measures",
       "money": "324 rings",
-      "mana": "13 mana crystals",
-      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 8 random herbs"
+      "mana": "about 13 mana crystals",
+      "herbs": "about 18 herbs"
+    },
+    {
+      "rank": 10,
+      "production": 20,
+      "label": "20 random resources",
+      "resources": "20 ingots or measures",
+      "money": "360 rings",
+      "mana": "about 14 mana crystals",
+      "herbs": "about 20 herbs"
+    },
+    {
+      "rank": 11,
+      "production": 22,
+      "label": "22 random resources",
+      "resources": "22 ingots or measures",
+      "money": "396 rings",
+      "mana": "about 16 mana crystals",
+      "herbs": "about 22 herbs"
+    },
+    {
+      "rank": 12,
+      "production": 24,
+      "label": "24 random resources",
+      "resources": "24 ingots or measures",
+      "money": "432 rings",
+      "mana": "about 17 mana crystals",
+      "herbs": "about 24 herbs"
+    },
+    {
+      "rank": 13,
+      "production": 26,
+      "label": "26 random resources",
+      "resources": "26 ingots or measures",
+      "money": "468 rings",
+      "mana": "about 19 mana crystals",
+      "herbs": "about 26 herbs"
+    },
+    {
+      "rank": 14,
+      "production": 28,
+      "label": "28 random resources",
+      "resources": "28 ingots or measures",
+      "money": "504 rings",
+      "mana": "about 20 mana crystals",
+      "herbs": "about 28 herbs"
+    },
+    {
+      "rank": 15,
+      "production": 30,
+      "label": "30 random resources",
+      "resources": "30 ingots or measures",
+      "money": "540 rings",
+      "mana": "about 22 mana crystals",
+      "herbs": "about 30 herbs"
+    },
+    {
+      "rank": 16,
+      "production": 32,
+      "label": "32 random resources",
+      "resources": "32 ingots or measures",
+      "money": "576 rings",
+      "mana": "about 23 mana crystals",
+      "herbs": "about 32 herbs"
+    },
+    {
+      "rank": 17,
+      "production": 34,
+      "label": "34 random resources",
+      "resources": "34 ingots or measures",
+      "money": "612 rings",
+      "mana": "about 24 mana crystals",
+      "herbs": "about 34 herbs"
+    },
+    {
+      "rank": 18,
+      "production": 36,
+      "label": "36 random resources",
+      "resources": "36 ingots or measures",
+      "money": "648 rings",
+      "mana": "about 26 mana crystals",
+      "herbs": "about 36 herbs"
     }
   ],
   "activities": [
     {
       "id": "campaigning",
       "name": "Campaigning",
-      "description": "Support military armies on campaign to take or defend territory.",
+      "description": "Disciplined support for military goals and strategies, usually supporting an Imperial army.",
       "actions": [
         {
           "id": "support-imperial-army",
@@ -89,60 +181,75 @@
           "description": "Adds your military strength to an army. Income only applies if that army receives Imperial guerdon."
         },
         {
-          "id": "campaign-plot-option",
-          "name": "Campaigning Plot Option",
+          "id": "campaigning-venture-placeholder",
+          "name": "Campaigning Venture / Plot Option",
           "type": "narrative",
           "default": false,
-          "description": "Placeholder for specific campaign opportunities added during play."
-        }
-      ]
-    },
-    {
-      "id": "raiding",
-      "name": "Raiding",
-      "description": "Launch a foray against enemies of the Empire, focused on disruption, looting, and enemy combatants.",
-      "actions": [
-        {
-          "id": "raid-jotun",
-          "name": "Raid the Jotun",
-          "type": "loot",
-          "default": true,
-          "description": "A legal raid against the Jotun. Provides random resource loot by effective rank."
-        },
-        {
-          "id": "raid-druj",
-          "name": "Raid the Druj",
-          "type": "loot",
-          "default": true,
-          "description": "A legal raid against the Druj. Provides random resource loot by effective rank."
-        },
-        {
-          "id": "raid-grendel",
-          "name": "Raid the Grendel",
-          "type": "loot",
-          "default": true,
-          "description": "A legal raid against the Grendel. Provides random resource loot by effective rank."
-        },
-        {
-          "id": "raiding-plot-option",
-          "name": "Raiding Plot Option",
-          "type": "narrative",
-          "default": false,
-          "description": "Placeholder for specific raiding opportunities added during play."
+          "description": "There are currently no standard campaigning ventures available. Use this for temporary plot opportunities."
         }
       ]
     },
     {
       "id": "guarding",
       "name": "Guarding",
-      "description": "Defensive work such as garrisoning a fortification, escorting caravans, or protecting Imperial interests.",
+      "description": "Protecting someone, something, or somewhere: caravans, fortifications, borders, roads, settlements, or Imperial interests.",
       "actions": [
         {
           "id": "mercenary-work",
           "name": "Mercenary Work",
-          "type": "loot",
+          "type": "venture",
           "default": true,
-          "description": "Default military downtime if no action is selected. Provides random resource loot by effective rank."
+          "restricted": "Always available to any Imperial character.",
+          "description": "Find paid work as guards, escorts, patrols, caravan protectors, settlement defenders, or general soldiers for hire.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 36,
+                "2": 36,
+                "3": 72,
+                "4": 72,
+                "5": 108,
+                "6": 144,
+                "7": 144,
+                "8": 180,
+                "9": 180,
+                "10": 216,
+                "11": 216,
+                "12": 252,
+                "13": 252,
+                "14": 288,
+                "15": 288,
+                "16": 324,
+                "17": 324,
+                "18": 360
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 0,
+                "2": 2,
+                "3": 2,
+                "4": 4,
+                "5": 4,
+                "6": 4,
+                "7": 6,
+                "8": 6,
+                "9": 8,
+                "10": 8,
+                "11": 10,
+                "12": 10,
+                "13": 12,
+                "14": 12,
+                "15": 14,
+                "16": 14,
+                "17": 16,
+                "18": 16
+              }
+            }
+          ]
         },
         {
           "id": "defend-fortification",
@@ -150,6 +257,151 @@
           "type": "guerdon",
           "default": true,
           "description": "Adds your military strength to a fortification. Income only applies if the fortification receives Imperial guerdon."
+        },
+        {
+          "id": "beating-the-bounds",
+          "name": "Beating the Bounds",
+          "type": "venture",
+          "restricted": "Marcher characters with the beater archetype only.",
+          "description": "Patrol the borders of the Marches and raise the alarm against barbarian encroachment.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 20,
+                "2": 40,
+                "3": 60,
+                "4": 80,
+                "5": 100,
+                "6": 120,
+                "7": 140,
+                "8": 160,
+                "9": 180,
+                "10": 200,
+                "11": 220,
+                "12": 240,
+                "13": 260,
+                "14": 280,
+                "15": 300,
+                "16": 320,
+                "17": 340,
+                "18": 360
+              },
+              "unit": "rings"
+            }
+          ]
+        },
+        {
+          "id": "protect-vales-varushka",
+          "name": "Protect the Vales of Varushka",
+          "type": "venture",
+          "restricted": "Varushkan and Dawnish characters only.",
+          "description": "Protect the dark vales of Varushka from wolves, horrors, unnatural threats, and worse.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 42,
+                "2": 54,
+                "3": 66,
+                "4": 78,
+                "5": 90,
+                "6": 108,
+                "7": 126,
+                "8": 144,
+                "9": 162,
+                "10": 180,
+                "11": 198,
+                "12": 216,
+                "13": 234,
+                "14": 252,
+                "15": 270,
+                "16": 288,
+                "17": 306,
+                "18": 324
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Material",
+              "amountByRank": {
+                "1": 1,
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6,
+                "7": 7,
+                "8": 8,
+                "9": 9,
+                "10": 10,
+                "11": 11,
+                "12": 12,
+                "13": 13,
+                "14": 14,
+                "15": 15,
+                "16": 16,
+                "17": 17,
+                "18": 18
+              }
+            }
+          ]
+        },
+        {
+          "id": "roadwardens",
+          "name": "Roadwardens",
+          "type": "venture",
+          "restricted": "Navarr characters only.",
+          "description": "Patrol Imperial roads, protect travellers, hunt bandits, escort caravans, and keep the roads open.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 30,
+                "2": 48,
+                "3": 66,
+                "4": 102,
+                "5": 120,
+                "6": 156,
+                "7": 174,
+                "8": 210,
+                "9": 228,
+                "10": 264,
+                "11": 282,
+                "12": 318,
+                "13": 336,
+                "14": 372,
+                "15": 390,
+                "16": 426,
+                "17": 444,
+                "18": 480
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 3,
+                "5": 4,
+                "6": 4,
+                "7": 5,
+                "8": 5,
+                "9": 6,
+                "10": 6,
+                "11": 7,
+                "12": 7,
+                "13": 8,
+                "14": 8,
+                "15": 9,
+                "16": 9,
+                "17": 10,
+                "18": 10
+              }
+            }
+          ]
         },
         {
           "id": "guarding-plot-option",
@@ -161,16 +413,684 @@
       ]
     },
     {
+      "id": "questing",
+      "name": "Questing",
+      "description": "Seek danger, treasure, experience, and opportunities for glory in wild or dangerous places.",
+      "actions": [
+        {
+          "id": "seek-glory",
+          "name": "Seek Glory",
+          "type": "venture",
+          "default": true,
+          "restricted": "Always available to any Imperial character.",
+          "description": "Venture into dangerous or unknown places seeking glory, treasure, and dramatic stories.",
+          "rewardsByRank": [
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 2,
+                "2": 4,
+                "3": 6,
+                "4": 8,
+                "5": 10,
+                "6": 12,
+                "7": 14,
+                "8": 16,
+                "9": 18,
+                "10": 20,
+                "11": 22,
+                "12": 24,
+                "13": 26,
+                "14": 28,
+                "15": 30,
+                "16": 32,
+                "17": 34,
+                "18": 36
+              }
+            }
+          ]
+        },
+        {
+          "id": "explore-the-depths",
+          "name": "Explore the Depths",
+          "type": "venture",
+          "restricted": "Available to characters from Dawn, Wintermark, Navarr, the League, and the Marches.",
+          "description": "Explore the monster-haunted depths below Lorenzo's Deep Pockets.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 12,
+                "4": 12,
+                "5": 24,
+                "6": 24,
+                "7": 36,
+                "8": 36,
+                "9": 48,
+                "10": 48,
+                "11": 60,
+                "12": 60,
+                "13": 72,
+                "14": 72,
+                "15": 84,
+                "16": 84,
+                "17": 96,
+                "18": 96
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Mana Crystal",
+              "amountByRank": {
+                "1": 0,
+                "2": 1,
+                "3": 2,
+                "4": 2,
+                "5": 3,
+                "6": 3,
+                "7": 4,
+                "8": 4,
+                "9": 5,
+                "10": 5,
+                "11": 6,
+                "12": 6,
+                "13": 7,
+                "14": 7,
+                "15": 8,
+                "16": 8,
+                "17": 9,
+                "18": 9
+              }
+            },
+            {
+              "name": "Tempest Jade",
+              "amountByRank": {
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 3,
+                "5": 3,
+                "6": 4,
+                "7": 4,
+                "8": 5,
+                "9": 5,
+                "10": 6,
+                "11": 6,
+                "12": 7,
+                "13": 7,
+                "14": 8,
+                "15": 8,
+                "16": 9,
+                "17": 9,
+                "18": 10
+              }
+            },
+            {
+              "name": "Weltsilver",
+              "amountByRank": {
+                "1": 1,
+                "2": 2,
+                "3": 2,
+                "4": 2,
+                "5": 3,
+                "6": 4,
+                "7": 4,
+                "8": 5,
+                "9": 5,
+                "10": 6,
+                "11": 6,
+                "12": 7,
+                "13": 7,
+                "14": 8,
+                "15": 8,
+                "16": 9,
+                "17": 9,
+                "18": 10
+              }
+            }
+          ]
+        },
+        {
+          "id": "hunt-suaq-wastes",
+          "name": "Hunt the Suaq Wastes",
+          "type": "venture",
+          "restricted": "Wintermark and Dawnish characters only.",
+          "description": "Hunt dangerous beasts and protect the people of Sermersuaq.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 36,
+                "2": 72,
+                "3": 38,
+                "4": 74,
+                "5": 110,
+                "6": 146,
+                "7": 112,
+                "8": 148,
+                "9": 184,
+                "10": 220,
+                "11": 256,
+                "12": 222,
+                "13": 258,
+                "14": 294,
+                "15": 330,
+                "16": 366,
+                "17": 332,
+                "18": 368
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Wasteland Vis",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2,
+                "8": 2,
+                "9": 2,
+                "10": 2,
+                "11": 2,
+                "12": 3,
+                "13": 3,
+                "14": 3,
+                "15": 3,
+                "16": 3,
+                "17": 4,
+                "18": 4
+              }
+            },
+            {
+              "name": "Keen Lifeblood",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+                "6": 0,
+                "7": 0,
+                "8": 0,
+                "9": 0,
+                "10": 1,
+                "11": 1,
+                "12": 1,
+                "13": 1,
+                "14": 1,
+                "15": 1,
+                "16": 1,
+                "17": 1,
+                "18": 1
+              },
+              "scalable": false
+            }
+          ]
+        },
+        {
+          "id": "quest-against-vallorn",
+          "name": "Quest Against the Vallorn",
+          "type": "venture",
+          "restricted": "Dawnish characters only.",
+          "description": "Seek glory and treasure in the depths of vallorn-infested Broc\u00e9liande.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 24,
+                "2": 24,
+                "3": 36,
+                "4": 36,
+                "5": 48,
+                "6": 48,
+                "7": 66,
+                "8": 66,
+                "9": 84,
+                "10": 84,
+                "11": 102,
+                "12": 102,
+                "13": 120,
+                "14": 120,
+                "15": 138,
+                "16": 138,
+                "17": 156,
+                "18": 156
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Herbs",
+              "amountByRank": {
+                "1": 2,
+                "2": 4,
+                "3": 4,
+                "4": 6,
+                "5": 6,
+                "6": 9,
+                "7": 9,
+                "8": 12,
+                "9": 12,
+                "10": 15,
+                "11": 15,
+                "12": 18,
+                "13": 18,
+                "14": 21,
+                "15": 21,
+                "16": 24,
+                "17": 24,
+                "18": 27
+              }
+            },
+            {
+              "name": "Random Natural Materials",
+              "amountByRank": {
+                "1": 2,
+                "2": 2,
+                "3": 3,
+                "4": 3,
+                "5": 4,
+                "6": 4,
+                "7": 5,
+                "8": 5,
+                "9": 6,
+                "10": 6,
+                "11": 7,
+                "12": 7,
+                "13": 8,
+                "14": 8,
+                "15": 9,
+                "16": 9,
+                "17": 10,
+                "18": 10
+              }
+            }
+          ]
+        },
+        {
+          "id": "questing-plot-option",
+          "name": "Questing Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific questing opportunities added during play."
+        }
+      ]
+    },
+    {
+      "id": "raiding",
+      "name": "Raiding",
+      "description": "Small-scale attacks against the Empire's enemies, focused on violence, disruption, and loot.",
+      "actions": [
+        {
+          "id": "raid-druj",
+          "name": "Raid the Druj",
+          "type": "venture",
+          "default": true,
+          "restricted": "Available while the Empire is at war with the Druj.",
+          "description": "Launch dangerous raids against the Druj in the Mallum or threatened Imperial territories.",
+          "rewardsByRank": [
+            {
+              "name": "Druj Potions",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+                "6": 1,
+                "7": 1,
+                "8": 1,
+                "9": 1,
+                "10": 1,
+                "11": 1,
+                "12": 1,
+                "13": 1,
+                "14": 1,
+                "15": 1,
+                "16": 1,
+                "17": 1,
+                "18": 1
+              },
+              "scalable": false
+            },
+            {
+              "name": "Random Herbs",
+              "amountByRank": {
+                "1": 3,
+                "2": 3,
+                "3": 6,
+                "4": 6,
+                "5": 9,
+                "6": 9,
+                "7": 9,
+                "8": 12,
+                "9": 12,
+                "10": 15,
+                "11": 15,
+                "12": 18,
+                "13": 18,
+                "14": 21,
+                "15": 21,
+                "16": 24,
+                "17": 24,
+                "18": 27
+              }
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 0,
+                "2": 2,
+                "3": 2,
+                "4": 4,
+                "5": 4,
+                "6": 4,
+                "7": 6,
+                "8": 6,
+                "9": 8,
+                "10": 8,
+                "11": 10,
+                "12": 10,
+                "13": 12,
+                "14": 12,
+                "15": 14,
+                "16": 14,
+                "17": 16,
+                "18": 16
+              }
+            }
+          ]
+        },
+        {
+          "id": "raid-grendel",
+          "name": "Raid the Grendel",
+          "type": "venture",
+          "default": true,
+          "restricted": "Available while the Empire is at war with the Grendel.",
+          "description": "Raid Grendel outposts, mining camps, settlements, or merchant caravans.",
+          "rewardsByRank": [
+            {
+              "name": "Grendel Luxuries",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+                "6": 1,
+                "7": 1,
+                "8": 1,
+                "9": 1,
+                "10": 1,
+                "11": 1,
+                "12": 1,
+                "13": 1,
+                "14": 1,
+                "15": 1,
+                "16": 1,
+                "17": 1,
+                "18": 1
+              },
+              "scalable": false
+            },
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 0,
+                "2": 36,
+                "3": 36,
+                "4": 72,
+                "5": 72,
+                "6": 108,
+                "7": 108,
+                "8": 144,
+                "9": 144,
+                "10": 180,
+                "11": 180,
+                "12": 216,
+                "13": 216,
+                "14": 252,
+                "15": 252,
+                "16": 288,
+                "17": 288,
+                "18": 324
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 2,
+                "2": 2,
+                "3": 4,
+                "4": 4,
+                "5": 6,
+                "6": 6,
+                "7": 8,
+                "8": 8,
+                "9": 10,
+                "10": 10,
+                "11": 12,
+                "12": 12,
+                "13": 14,
+                "14": 14,
+                "15": 16,
+                "16": 16,
+                "17": 18,
+                "18": 18
+              }
+            }
+          ]
+        },
+        {
+          "id": "raid-jotun",
+          "name": "Raid the Jotun",
+          "type": "venture",
+          "default": true,
+          "restricted": "Available while the Empire is at war with the Jotun.",
+          "description": "Raid Jotun holdings, outposts, and stores for wealth and supplies.",
+          "rewardsByRank": [
+            {
+              "name": "Jotun Trinket",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+                "6": 1,
+                "7": 1,
+                "8": 1,
+                "9": 1,
+                "10": 1,
+                "11": 1,
+                "12": 1,
+                "13": 1,
+                "14": 1,
+                "15": 1,
+                "16": 1,
+                "17": 1,
+                "18": 1
+              },
+              "scalable": false
+            },
+            {
+              "name": "Random Metals",
+              "amountByRank": {
+                "1": 0,
+                "2": 2,
+                "3": 2,
+                "4": 4,
+                "5": 4,
+                "6": 4,
+                "7": 6,
+                "8": 6,
+                "9": 8,
+                "10": 8,
+                "11": 10,
+                "12": 10,
+                "13": 12,
+                "14": 12,
+                "15": 14,
+                "16": 14,
+                "17": 16,
+                "18": 16
+              }
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 2,
+                "2": 2,
+                "3": 4,
+                "4": 4,
+                "5": 6,
+                "6": 6,
+                "7": 6,
+                "8": 8,
+                "9": 8,
+                "10": 10,
+                "11": 10,
+                "12": 12,
+                "13": 12,
+                "14": 14,
+                "15": 14,
+                "16": 16,
+                "17": 16,
+                "18": 18
+              }
+            }
+          ]
+        },
+        {
+          "id": "wagon-raiding",
+          "name": "Wagon Raiding",
+          "type": "venture",
+          "restricted": "Varushkan characters with the wagon raider archetype only.",
+          "description": "Smash-and-grab raids into enemy territory to seize ingots and measures.",
+          "rewardsByRank": [
+            {
+              "name": "Random Material",
+              "amountByRank": {
+                "1": 4,
+                "2": 6,
+                "3": 8,
+                "4": 10,
+                "5": 12,
+                "6": 14,
+                "7": 16,
+                "8": 18,
+                "9": 20,
+                "10": 22,
+                "11": 24,
+                "12": 26,
+                "13": 28,
+                "14": 30,
+                "15": 32,
+                "16": 34,
+                "17": 36,
+                "18": 38
+              }
+            }
+          ]
+        },
+        {
+          "id": "raiding-plot-option",
+          "name": "Raiding Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific raiding opportunities added during play."
+        }
+      ]
+    },
+    {
       "id": "scouting",
       "name": "Scouting",
-      "description": "Infiltration, exploration, reconnaissance, and gathering information in dangerous places.",
+      "description": "Subtle military action: stealth, sabotage, reconnaissance, infiltration, and information gathering.",
       "actions": [
         {
           "id": "bounty-hunting",
           "name": "Bounty Hunting",
-          "type": "loot",
+          "type": "venture",
           "default": true,
-          "description": "Track criminals or threats to Imperial citizens. Provides random resource loot by effective rank."
+          "restricted": "Available to any Imperial character.",
+          "description": "Track criminals, support magistrates, recover goods, and quietly deal with internal threats.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 36,
+                "4": 36,
+                "5": 72,
+                "6": 72,
+                "7": 72,
+                "8": 108,
+                "9": 108,
+                "10": 108,
+                "11": 144,
+                "12": 144,
+                "13": 144,
+                "14": 180,
+                "15": 180,
+                "16": 180,
+                "17": 216,
+                "18": 216
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Resource",
+              "amountByRank": {
+                "1": 2,
+                "2": 2,
+                "3": 2,
+                "4": 4,
+                "5": 4,
+                "6": 4,
+                "7": 6,
+                "8": 6,
+                "9": 6,
+                "10": 8,
+                "11": 8,
+                "12": 8,
+                "13": 10,
+                "14": 10,
+                "15": 10,
+                "16": 12,
+                "17": 12,
+                "18": 12
+              }
+            },
+            {
+              "name": "Liao",
+              "amountByRank": {
+                "1": 0,
+                "2": 3,
+                "3": 3,
+                "4": 3,
+                "5": 3,
+                "6": 6,
+                "7": 6,
+                "8": 6,
+                "9": 9,
+                "10": 9,
+                "11": 9,
+                "12": 12,
+                "13": 12,
+                "14": 12,
+                "15": 15,
+                "16": 15,
+                "17": 15,
+                "18": 18
+              }
+            }
+          ]
         },
         {
           "id": "support-spy-network",
@@ -180,32 +1100,154 @@
           "description": "Adds your military strength to a spy network. Income only applies if the spy network receives Imperial guerdon."
         },
         {
+          "id": "war-of-whispers",
+          "name": "War of Whispers",
+          "type": "venture",
+          "restricted": "Available while the Whisper Gallery remain under enmity.",
+          "description": "Hunt agents and servants of the Whisper Gallery.",
+          "rewards": [
+            {
+              "name": "Money",
+              "amount": 120,
+              "unit": "rings"
+            },
+            {
+              "name": "Mana Crystal",
+              "amount": 2
+            }
+          ]
+        },
+        {
+          "id": "explore-terunael",
+          "name": "Explore the Ruins of Terunael",
+          "type": "venture",
+          "restricted": "Navarr characters only.",
+          "description": "Explore ancient Terunael ruins within or near the vallorn.",
+          "rewardsByRank": [
+            {
+              "name": "Money",
+              "amountByRank": {
+                "1": 12,
+                "2": 18,
+                "3": 38,
+                "4": 38,
+                "5": 38,
+                "6": 50,
+                "7": 50,
+                "8": 50,
+                "9": 58,
+                "10": 58,
+                "11": 58,
+                "12": 66,
+                "13": 66,
+                "14": 66,
+                "15": 74,
+                "16": 74,
+                "17": 74,
+                "18": 82
+              },
+              "unit": "rings"
+            },
+            {
+              "name": "Random Herbs",
+              "amountByRank": {
+                "1": 2,
+                "2": 3,
+                "3": 4,
+                "4": 4,
+                "5": 4,
+                "6": 6,
+                "7": 6,
+                "8": 6,
+                "9": 8,
+                "10": 8,
+                "11": 8,
+                "12": 10,
+                "13": 10,
+                "14": 10,
+                "15": 12,
+                "16": 12,
+                "17": 12,
+                "18": 14
+              }
+            },
+            {
+              "name": "Random Natural Materials",
+              "amountByRank": {
+                "1": 0,
+                "2": 1,
+                "3": 1,
+                "4": 3,
+                "5": 3,
+                "6": 3,
+                "7": 5,
+                "8": 5,
+                "9": 5,
+                "10": 7,
+                "11": 7,
+                "12": 7,
+                "13": 9,
+                "14": 9,
+                "15": 9,
+                "16": 11,
+                "17": 11,
+                "18": 11
+              }
+            },
+            {
+              "name": "Vital Honey",
+              "amountByRank": {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 1,
+                "6": 1,
+                "7": 1,
+                "8": 2,
+                "9": 2,
+                "10": 2,
+                "11": 3,
+                "12": 3,
+                "13": 3,
+                "14": 4,
+                "15": 4,
+                "16": 4,
+                "17": 5,
+                "18": 5
+              },
+              "scalable": false
+            }
+          ]
+        },
+        {
+          "id": "bone-pilgrimage",
+          "name": "The Bone Pilgrimage",
+          "type": "venture",
+          "restricted": "Available to Imperial Orc and Highborn characters.",
+          "description": "Recover and inter orc remains across the Empire and beyond.",
+          "rewards": [
+            {
+              "name": "Money",
+              "amount": 90,
+              "unit": "rings"
+            },
+            {
+              "name": "Random Herbs",
+              "amount": 7
+            },
+            {
+              "name": "Liao",
+              "amount": 1
+            }
+          ]
+        },
+        {
           "id": "scouting-plot-option",
           "name": "Scouting Plot Option",
           "type": "narrative",
           "default": false,
           "description": "Placeholder for specific scouting opportunities added during play."
-        }
-      ]
-    },
-    {
-      "id": "questing",
-      "name": "Questing",
-      "description": "Seek danger in search of treasure, experience, and opportunities for glory.",
-      "actions": [
-        {
-          "id": "seek-glory",
-          "name": "Seek Glory",
-          "type": "loot",
-          "default": true,
-          "description": "Venture into dangerous or unknown places. Provides unpredictable random resource loot by effective rank."
-        },
-        {
-          "id": "questing-plot-option",
-          "name": "Questing Plot Option",
-          "type": "narrative",
-          "default": false,
-          "description": "Placeholder for specific questing opportunities added during play."
         }
       ]
     }

@@ -76,6 +76,8 @@ async function init() {
   ]);
 
   state.data = optionsData;
+  state.rank = Number(optionsData.defaultRank || DEFAULT_UNIT_RANK);
+
   state.rituals = [
     {
       id: "none",
@@ -114,13 +116,21 @@ function getRitual() {
 }
 
 function getMaxRank() {
-  return Number(state.data.maxRank || 8);
+  return Number(state.data.maxRank || 18);
+}
+
+function getMinRank() {
+  return Number(state.data.minRank || MIN_UNIT_RANK);
+}
+
+function getUnitLevel(rank = state.rank) {
+  return Math.max(1, Number(rank) - 4);
 }
 
 function getEffectiveRank() {
   const ritual = getRitual();
   const raw = state.rank + state.modifier + Number(ritual.rankModifier || 0);
-  return Math.max(MIN_UNIT_RANK, Math.min(Number(state.data.maxRank || 18), raw));
+  return Math.max(getMinRank(), Math.min(getMaxRank(), raw));
 }
 
 function getLootRow(rank = getEffectiveRank()) {
@@ -138,14 +148,13 @@ function populateControls() {
   ).join("");
 
   els.rankSelect.innerHTML = "";
-
-for (let i = 5; i <= Number(state.data.maxRank || 18); i += 1) {
-  const level = i - 4;
-  els.rankSelect.insertAdjacentHTML(
-    "beforeend",
-    `<option value="${i}">Level ${level} — Rank ${i}</option>`
-  );
-}
+  for (let i = DEFAULT_UNIT_RANK; i <= getMaxRank(); i += 1) {
+    const level = getUnitLevel(i);
+    els.rankSelect.insertAdjacentHTML(
+      "beforeend",
+      `<option value="${i}">Level ${level} — Rank ${i}</option>`
+    );
+  }
 
   els.modifierSelect.innerHTML = "";
   for (let i = -5; i <= 5; i += 1) {
@@ -232,6 +241,61 @@ function formatSigned(value) {
   return number > 0 ? `+${number}` : String(number);
 }
 
+function actionTypeLabel(type) {
+  if (type === "loot") return "Loot";
+  if (type === "guerdon") return "Guerdon Eligible";
+  if (type === "venture") return "Venture";
+  return "Narrative";
+}
+
+function adjustAmount(amount, multiplier, scalable = true) {
+  if (!Number.isFinite(Number(amount))) return amount;
+  const number = Number(amount);
+  if (!scalable || multiplier === 1) return number;
+  if (number === 0) return 0;
+  return Math.max(1, Math.ceil(number * multiplier));
+}
+
+function formatReward(reward, amount) {
+  if (amount === undefined || amount === null || amount === "") return null;
+  if (Number(amount) === 0) return null;
+  const unit = reward.unit ? ` ${reward.unit}` : "";
+  return `${amount}${unit}`;
+}
+
+function rewardsForAction(action) {
+  const rank = getEffectiveRank();
+  const ritual = getRitual();
+  const multiplier = Number(ritual.productionMultiplier || 1);
+
+  if (Array.isArray(action.rewardsByRank)) {
+    return action.rewardsByRank
+      .map(reward => {
+        const raw = reward.amountByRank?.[String(rank)];
+        const amount = adjustAmount(raw, multiplier, reward.scalable !== false);
+        return {
+          name: reward.name,
+          amount: formatReward(reward, amount)
+        };
+      })
+      .filter(reward => reward.amount);
+  }
+
+  if (Array.isArray(action.rewards)) {
+    return action.rewards
+      .map(reward => {
+        const amount = adjustAmount(reward.amount, multiplier, reward.scalable !== false);
+        return {
+          name: reward.name,
+          amount: formatReward(reward, amount)
+        };
+      })
+      .filter(reward => reward.amount);
+  }
+
+  return [];
+}
+
 function render() {
   const activity = getActivity();
   const action = getAction();
@@ -247,16 +311,16 @@ function render() {
 
   els.breakdown.innerHTML = `
     <div class="breakdown-row">
-  <span>Base unit</span>
-  <strong>Level ${state.rank - 4} / Rank ${state.rank}</strong>
-</div>
+      <span>Activity</span>
+      <strong>${activity.name}</strong>
+    </div>
     <div class="breakdown-row">
       <span>Action</span>
       <strong>${action.name}</strong>
     </div>
     <div class="breakdown-row">
-      <span>Base rank</span>
-      <strong>${state.rank}</strong>
+      <span>Base unit</span>
+      <strong>Level ${getUnitLevel(state.rank)} / Rank ${state.rank}</strong>
     </div>
     <div class="breakdown-row">
       <span>Campaign modifier</span>
@@ -270,13 +334,13 @@ function render() {
       <span>Ritual rank change</span>
       <strong>${formatSigned(ritual.rankModifier)}</strong>
     </div>
-  <div class="breakdown-row breakdown-row--total">
-  <span>Effective rank</span>
-  <strong>${effectiveRank}</strong>
-</div>
+    <div class="breakdown-row breakdown-row--total">
+      <span>Effective rank</span>
+      <strong>${effectiveRank}</strong>
+    </div>
   `;
 
-  els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
+  els.actionType.textContent = actionTypeLabel(action.type);
   els.actionTitle.textContent = action.name;
   els.actionDescription.textContent = action.description || "No description provided.";
 
@@ -284,6 +348,31 @@ function render() {
 }
 
 function renderOutput(action) {
+  if (action.type === "venture") {
+    const rewards = rewardsForAction(action);
+    const restrictionRow = action.restricted ? `
+      <div class="summary-item">
+        <span>Restriction</span>
+        <strong>${action.restricted}</strong>
+      </div>
+    ` : "";
+
+    const rewardRows = rewards.length ? rewards.map(reward => `
+      <div class="summary-item">
+        <span>${reward.name}</span>
+        <strong>${reward.amount}</strong>
+      </div>
+    `).join("") : `
+      <div class="summary-item">
+        <span>Outcome</span>
+        <strong>No income listed for this venture</strong>
+      </div>
+    `;
+
+    els.lootOutput.innerHTML = `${restrictionRow}${rewardRows}`;
+    return;
+  }
+
   if (action.type === "loot") {
     const row = getLootRow();
     const ritual = getRitual();
@@ -366,7 +455,7 @@ function getSummaryLines() {
     "",
     `Activity: ${activity.name}`,
     `Action: ${action.name}`,
-    `Base Unit: Level ${state.rank - 4} / Rank ${state.rank}`,
+    `Base Unit: Level ${getUnitLevel(state.rank)} / Rank ${state.rank}`,
     `Campaign Modifier: ${formatSigned(state.modifier)}`,
     `Ritual: ${ritual.name}`,
     `Ritual Rank Change: ${formatSigned(ritual.rankModifier)}`,
@@ -375,7 +464,17 @@ function getSummaryLines() {
     "Downtime Result:"
   ];
 
-  if (action.type === "loot") {
+  if (action.type === "venture") {
+    if (action.restricted) {
+      lines.push(`Restriction: ${action.restricted}`);
+    }
+    const rewards = rewardsForAction(action);
+    if (rewards.length) {
+      rewards.forEach(reward => lines.push(`${reward.name}: ${reward.amount}`));
+    } else {
+      lines.push("Outcome: No income listed for this venture.");
+    }
+  } else if (action.type === "loot") {
     const row = getLootRow();
     const multiplier = Number(ritual.productionMultiplier || 1);
     const baseProduction = Number(row.production || 0);
