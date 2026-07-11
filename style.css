@@ -6,13 +6,14 @@
   --parchment-light: #f5e9c8;
   --parchment-deep: #cdb57d;
 
-  --campaign-dark: #170b0d;
-  --campaign-red: #3a1115;
-  --campaign-red-light: #5a171d;
+  --campaign-dark: #14080a;
+  --campaign-red: #2a0c10;
+  --campaign-red-light: #4b151b;
+  --campaign-red-bright: #7b2028;
 
-  --steel: #9ea7ad;
+  --steel: #8f9aa1;
   --steel-light: #d8dee2;
-  --steel-dark: #566169;
+  --steel-dark: #4f5a61;
 
   --gold: #c59a42;
   --gold-light: #e4c47b;
@@ -22,7 +23,7 @@
 
   --muted: #6e5b42;
   --line: rgba(72, 47, 25, 0.46);
-  --shadow: 0 12px 28px rgba(10, 4, 5, 0.45);
+  --shadow: 0 12px 28px rgba(10, 4, 5, 0.48);
   --radius: 5px;
 
   --display-font: "Viner Hand ITC", "Lucida Calligraphy", "URW Chancery L", cursive;
@@ -47,7 +48,7 @@ body {
     linear-gradient(rgba(18, 7, 9, 0.34), rgba(18, 7, 9, 0.34)),
     repeating-linear-gradient(90deg, transparent 0 78px, rgba(255,255,255,.018) 79px 80px),
     repeating-linear-gradient(0deg, transparent 0 54px, rgba(0,0,0,.06) 55px 56px),
-    radial-gradient(circle at 50% 0, #4d171d 0, #261014 55%, #12080a 100%);
+    radial-gradient(circle at 50% 0, #4b151b 0, #261014 55%, #12080a 100%);
 }
 
 button,
@@ -60,7 +61,9 @@ button {
   border: 0;
 }
 
-/* Header */
+/* =========================
+   Header
+   ========================= */
 
 .site-header {
   position: relative;
@@ -102,15 +105,6 @@ button {
   font-weight: 700;
 }
 
-.site-header .eyebrow::before {
-  content: "Downtime Tool";
-  font-size: inherit;
-}
-
-.site-header .eyebrow {
-  font-size: 0;
-}
-
 .site-header h1 {
   margin: 0;
   font-family: var(--display-font);
@@ -133,7 +127,9 @@ button {
   line-height: 1.65;
 }
 
-/* Shared headings */
+/* =========================
+   Headings
+   ========================= */
 
 h1,
 h2,
@@ -165,7 +161,9 @@ h3 {
   font-weight: 700;
 }
 
-/* Layout */
+/* =========================
+   Main layout
+   ========================= */
 
 .app-shell {
   width: min(1180px, calc(100% - 28px));
@@ -181,10 +179,11 @@ h3 {
   background-image:
     radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
     repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px);
-  border: 1px solid #7f5d2e;
+  border: 1px solid var(--steel-dark);
   border-radius: var(--radius);
   box-shadow:
     inset 0 0 0 3px rgba(255,244,204,.45),
+    0 0 0 2px rgba(143,154,161,.28),
     var(--shadow);
 }
 
@@ -194,7 +193,7 @@ h3 {
   position: absolute;
   inset: 6px;
   pointer-events: none;
-  border: 1px solid rgba(116,74,29,.28);
+  border: 1px solid rgba(79,90,97,.38);
 }
 
 .controls-panel {
@@ -208,7 +207,9 @@ h3 {
   margin: 0 auto;
 }
 
-/* Controls */
+/* =========================
+   Controls
+   ========================= */
 
 .controls-grid {
   display: grid;
@@ -261,7 +262,9 @@ select:focus {
     inset 0 1px 4px rgba(63,39,17,.12);
 }
 
-/* Notes */
+/* =========================
+   Notes
+   ========================= */
 
 .note,
 .ritual-note {
@@ -274,7 +277,9 @@ select:focus {
   line-height: 1.45;
 }
 
-/* Planner card */
+/* =========================
+   Planner summary panel
+   ========================= */
 
 .planner-card-header {
   display: flex;
@@ -290,39 +295,6 @@ select:focus {
   color: var(--red);
   font-size: clamp(2rem, 4vw, 3rem);
 }
-
-/* Buttons */
-
-.copy-button,
-.primary-button,
-.select-port-button {
-  cursor: pointer;
-  color: #f7ebca;
-  background: linear-gradient(#9a2d32, #68161b);
-  border: 1px solid #48100f;
-  border-radius: 3px;
-  box-shadow:
-    inset 0 1px rgba(255,255,255,.2),
-    0 2px 4px rgba(45,22,8,.3);
-  padding: 10px 14px;
-  font-weight: 700;
-  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
-}
-
-.copy-button {
-  min-width: 145px;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.08);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-/* Breakdown */
 
 .modifier-breakdown {
   display: grid;
@@ -359,8 +331,6 @@ button:active {
   font-size: 1rem;
 }
 
-/* Summary */
-
 .summary-box {
   margin-top: 18px;
   padding-top: 18px;
@@ -392,23 +362,42 @@ button:active {
   color: var(--red);
 }
 
-/* Optional result labels if present */
+/* =========================
+   Buttons
+   ========================= */
 
-.result-label,
-.action-type {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
+.copy-button,
+.primary-button,
+.select-port-button {
+  cursor: pointer;
   color: #f7ebca;
-  background: var(--steel-dark);
-  border: 1px solid #343b40;
-  border-radius: 999px;
-  font-size: .76rem;
+  background: linear-gradient(#9a2d32, #68161b);
+  border: 1px solid #48100f;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.2),
+    0 2px 4px rgba(45,22,8,.3);
+  padding: 10px 14px;
   font-weight: 700;
+  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
 }
 
-/* Footer */
+.copy-button {
+  min-width: 145px;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   Footer
+   ========================= */
 
 .site-credit {
   width: 100%;
@@ -455,13 +444,17 @@ button:active {
   font-weight: 700;
 }
 
-/* Utility */
+/* =========================
+   Utility
+   ========================= */
 
 [hidden] {
   display: none !important;
 }
 
-/* Responsive */
+/* =========================
+   Responsive
+   ========================= */
 
 @media (max-width: 1100px) {
   .controls-grid {
