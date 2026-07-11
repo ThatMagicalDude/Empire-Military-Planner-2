@@ -417,3 +417,89 @@ button:active { transform: translateY(0); }
 .kofi-button:hover {
   background: #8a4f2a;
 }
+/* --- Emergency parchment background restore --- */
+
+.panel,
+.controls-panel,
+.planner-card,
+.result-panel,
+.action-card,
+.port-card,
+.assignment-card,
+.military-card,
+.dialog,
+.port-dialog {
+  background-color: var(--parchment) !important;
+  background-image:
+    radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
+    repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--steel-dark) !important;
+  box-shadow:
+    inset 0 0 0 3px rgba(255,244,204,.45),
+    0 0 0 2px rgba(143,154,161,.28),
+    var(--shadow) !important;
+}
+
+.action-card *,
+.port-card *,
+.assignment-card *,
+.military-card *,
+.planner-card *,
+.result-panel * {
+  color: inherit;
+}
+
+.action-card h3,
+.port-card h3,
+.assignment-card h3,
+.military-card h3,
+.planner-card h2,
+.result-panel h2,
+.summary-box h3 {
+  color: var(--red) !important;
+}
+
+.action-card .eyebrow,
+.port-card .eyebrow,
+.assignment-card .eyebrow,
+.military-card .eyebrow {
+  color: var(--gold) !important;
+}
+
+.action-card p,
+.port-card p,
+.assignment-card p,
+.military-card p,
+.action-description,
+.action-restriction {
+  color: var(--ink-soft) !important;
+}
+
+.summary-item,
+.material-row,
+.loot-row {
+  background: rgba(255,247,220,.66) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(91,62,33,.24) !important;
+}
+
+.summary-item strong,
+.material-row strong,
+.loot-row strong {
+  color: var(--red) !important;
+}
+
+.modifier-breakdown {
+  background: rgba(255,247,220,.52) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.breakdown-row {
+  color: var(--ink-soft) !important;
+}
+
+.breakdown-row strong {
+  color: var(--ink) !important;
+}
