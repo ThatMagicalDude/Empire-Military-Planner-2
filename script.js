@@ -18,12 +18,12 @@ const els = {
   ritualSelect: document.querySelector("#ritualSelect"),
   ritualNote: document.querySelector("#ritualNote"),
   effectiveRank: document.querySelector("#effectiveRank"),
-  breakdown: document.querySelector("#breakdown"),
+  breakdown: document.querySelector("#modifierBreakdown"),
   copySummary: document.querySelector("#copySummary"),
   actionType: document.querySelector("#actionType"),
   actionTitle: document.querySelector("#actionTitle"),
   actionDescription: document.querySelector("#actionDescription"),
-  lootOutput: document.querySelector("#lootOutput")
+  lootOutput: document.querySelector("#productionSummary")
 };
 
 function slug(value) {
