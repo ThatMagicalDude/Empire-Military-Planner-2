@@ -117,15 +117,22 @@ h3 {
 }
 
 
-.panel::before,
-.action-card::before {
+.action-card::before,
+.military-panel::before,
+.controls-panel::before {
   content: "";
   position: absolute;
   inset: 6px;
   pointer-events: none;
   border: 1px solid rgba(79,90,97,.38);
 }
-
+.planner-layout::before,
+.actions-section::before,
+.app-shell::before {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+}
 .controls-panel { padding: 25px; margin-bottom: 24px; overflow: hidden; }
 
 .section-title-row {
@@ -502,4 +509,19 @@ button:active { transform: translateY(0); }
 
 .breakdown-row strong {
   color: var(--ink) !important;
+}
+/* Remove stray outer layout box */
+.planner-layout,
+.actions-section,
+.app-shell {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.planner-layout::before,
+.actions-section::before,
+.app-shell::before {
+  content: none !important;
+  display: none !important;
 }
