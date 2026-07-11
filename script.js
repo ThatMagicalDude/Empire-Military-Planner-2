@@ -189,9 +189,13 @@ function render() {
   els.modifierSelect.value = String(state.modifier);
   els.ritualSelect.value = state.ritualId;
 
+  if (els.ritualNote) {
   els.ritualNote.textContent = ritual.note;
-  els.effectiveRank.textContent = effectiveRank;
+}
 
+if (els.effectiveRank) {
+  els.effectiveRank.textContent = effectiveRank;
+}
   els.breakdown.innerHTML = `
   <div class="breakdown-row">
     <span>Activity</span>
