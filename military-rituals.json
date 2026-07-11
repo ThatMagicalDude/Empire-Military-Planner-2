@@ -1,59 +1,125 @@
 {
-  "version": "0.1",
+  "version": "starter-1.0",
   "rituals": [
     {
-      "id": "none",
-      "name": "No ritual",
-      "activity": "All",
+      "id": "like-water-through-your-fingers",
+      "name": "Like Water Through Your Fingers",
+      "option": "All",
       "rankModifier": 0,
-      "multiplier": 1,
-      "bonusCoin": 0,
-      "note": "No ritual selected."
+      "productionMultiplier": 0.25,
+      "note": "Reduces production by three quarters for a year (4 Campaigns)"
     },
     {
-      "id": "blessing-of-arms",
-      "name": "Blessing of Arms",
-      "activity": "All",
-      "rankModifier": 1,
-      "multiplier": 1,
-      "bonusCoin": 0,
-      "note": "+1 effective unit rank for this downtime action."
-    },
-    {
-      "id": "march-of-iron",
-      "name": "March of Iron",
-      "activity": "Campaigning",
-      "rankModifier": 2,
-      "multiplier": 1,
-      "bonusCoin": 0,
-      "note": "+2 effective rank while Campaigning. Placeholder ritual."
-    },
-    {
-      "id": "fog-of-war",
-      "name": "Fog of War",
-      "activity": "Patrol",
-      "rankModifier": 1,
-      "multiplier": 1,
-      "bonusCoin": 0,
-      "note": "+1 effective rank while Patrolling. Placeholder ritual."
-    },
-    {
-      "id": "plunderers-fortune",
-      "name": "Plunderer's Fortune",
-      "activity": "Raid",
+      "id": "vale-of-shadows",
+      "name": "Vale of Shadows",
+      "option": "All",
       "rankModifier": 0,
-      "multiplier": 1,
-      "bonusCoin": 25,
-      "note": "Adds +25 Coin if the result includes Coin. Placeholder ritual."
+      "productionMultiplier": 1,
+      "note": "Protects the resource from suffering the conquered territory penalty for a year"
     },
     {
-      "id": "ill-omens",
-      "name": "Ill Omens",
-      "activity": "All",
+      "id": "winter-s-ghosts",
+      "name": "Winter's Ghosts",
+      "option": "All",
       "rankModifier": -1,
-      "multiplier": 1,
-      "bonusCoin": 0,
-      "note": "-1 effective unit rank. Placeholder debuff."
+      "productionMultiplier": 1,
+      "note": "Reduces strength by 1 rank over the next campaign"
+    },
+    {
+      "id": "accoutrements-of-war",
+      "name": "Accoutrements of War",
+      "option": "Campaigning",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "clad-in-golden-raiment",
+      "name": "Clad in Golden Raiment",
+      "option": "Campaigning",
+      "rankModifier": 1,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 1 rank over the next campaign"
+    },
+    {
+      "id": "clarion-call-of-ivory-and-dust",
+      "name": "Clarion Call of Ivory and Dust",
+      "option": "Campaigning",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "raise-the-standard-of-war",
+      "name": "Raise the Standard of War",
+      "option": "Campaigning",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "unleash-the-beasts-within",
+      "name": "Unleash the Beasts Within",
+      "option": "Campaigning",
+      "rankModifier": 3,
+      "productionMultiplier": 1,
+      "note": "Increases strength an 3 ranks over the next campaign"
+    },
+    {
+      "id": "aspect-of-the-mountain",
+      "name": "Aspect of the Mountain",
+      "option": "Guarding",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "peregrine-and-ichimos",
+      "name": "Peregrine and Ichimos",
+      "option": "Guarding",
+      "rankModifier": 2,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 2 ranks over the next campaign"
+    },
+    {
+      "id": "feast-of-heroes",
+      "name": "Feast of Heroes",
+      "option": "Questing",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "blood-dimmed-tide",
+      "name": "Blood-dimmed Tide",
+      "option": "Raiding",
+      "rankModifier": 5,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 5 ranks over the next campaign"
+    },
+    {
+      "id": "merciless-wrath-of-the-reaver",
+      "name": "Merciless Wrath of the Reaver",
+      "option": "Raiding",
+      "rankModifier": 3,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 3 ranks over the next campaign"
+    },
+    {
+      "id": "shroud-of-mist-and-shadow",
+      "name": "Shroud of Mist and Shadow",
+      "option": "Raiding",
+      "rankModifier": 2,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 2 ranks over the next campaign"
+    },
+    {
+      "id": "sharp-eyes-of-the-corsair",
+      "name": "Sharp Eyes of the Corsair",
+      "option": "Scouting",
+      "rankModifier": 2,
+      "productionMultiplier": 1,
+      "note": "Increases strength by 2 ranks over the next campaign"
     }
   ]
 }

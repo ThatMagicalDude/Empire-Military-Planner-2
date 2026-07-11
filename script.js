@@ -1,634 +1,286 @@
-const DEFAULT_UNIT_RANK = 1;
-const MIN_UNIT_RANK = 1;
-
 const state = {
-  optionsData: null,
-  ritualsData: null,
-  baseRank: DEFAULT_UNIT_RANK,
-  unitUpgrade: 0,
-  regionalModifier: 0,
-  ritual: "none",
-  activityType: null,
-  selectedAssignmentId: null
+  data: null,
+  rituals: [],
+  activityId: "guarding",
+  actionId: "mercenary-work",
+  rank: 1,
+  modifier: 0,
+  ritualId: "none"
 };
 
-let els = {};
-let RITUALS = {};
+const els = {
+  characterName: document.querySelector("#characterName"),
+  unitName: document.querySelector("#unitName"),
+  activitySelect: document.querySelector("#activitySelect"),
+  actionSelect: document.querySelector("#actionSelect"),
+  rankSelect: document.querySelector("#rankSelect"),
+  modifierSelect: document.querySelector("#modifierSelect"),
+  ritualSelect: document.querySelector("#ritualSelect"),
+  ritualNote: document.querySelector("#ritualNote"),
+  effectiveRank: document.querySelector("#effectiveRank"),
+  breakdown: document.querySelector("#breakdown"),
+  copySummary: document.querySelector("#copySummary"),
+  actionType: document.querySelector("#actionType"),
+  actionTitle: document.querySelector("#actionTitle"),
+  actionDescription: document.querySelector("#actionDescription"),
+  lootOutput: document.querySelector("#lootOutput")
+};
 
-function getElements() {
-  els = {
-    characterName: document.querySelector("#characterName"),
-    unitName: document.querySelector("#unitName"),
-    activityType: document.querySelector("#activityType"),
-    baseRank: document.querySelector("#baseRank"),
-    unitUpgrade: document.querySelector("#unitUpgrade"),
-    ritualSelect: document.querySelector("#ritualSelect"),
-    regionalModifier: document.querySelector("#regionalModifier"),
-    effectiveRankDisplay: document.querySelector("#effectiveRankDisplay"),
-    effectiveRankNote: document.querySelector("#effectiveRankNote"),
-    ritualNote: document.querySelector("#ritualNote"),
-    resetPlanner: document.querySelector("#resetPlanner"),
-    assignmentSelect: document.querySelector("#assignmentSelect"),
-    modifierBreakdown: document.querySelector("#modifierBreakdown"),
-    resultSummary: document.querySelector("#resultSummary"),
-    assignments: document.querySelector("#assignments"),
-    emptyState: document.querySelector("#emptyState"),
-    copySummary: document.querySelector("#copySummary"),
-    detailsDialog: document.querySelector("#detailsDialog"),
-    closeDialog: document.querySelector("#closeDialog"),
-    dialogContent: document.querySelector("#dialogContent")
-  };
+function slug(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-function requiredElementsExist() {
-  return Object.values(els).every(Boolean);
-}
+async function init() {
+  const [optionsResponse, ritualsResponse] = await Promise.all([
+    fetch("military-options.json"),
+    fetch("military-rituals.json")
+  ]);
 
-function showFatalError(message) {
-  const target = document.querySelector("main") || document.body;
-  const errorBox = document.createElement("div");
-  errorBox.className = "empty-state fatal-error";
-  errorBox.textContent = message;
-  target.innerHTML = "";
-  target.appendChild(errorBox);
-}
+  state.data = await optionsResponse.json();
+  const ritualData = await ritualsResponse.json();
 
-function buildRituals(ritualsData) {
-  const rituals = {};
-
-  (ritualsData.rituals || []).forEach(ritual => {
-    rituals[ritual.id] = {
-      id: ritual.id,
-      name: ritual.name,
-      activity: ritual.activity || "All",
-      rankModifier: Number(ritual.rankModifier || 0),
-      multiplier: Number(ritual.multiplier || 1),
-      bonusCoin: Number(ritual.bonusCoin || 0),
-      note: ritual.note || ritual.name
-    };
-  });
-
-  if (!rituals.none) {
-    rituals.none = {
+  state.rituals = [
+    {
       id: "none",
       name: "No ritual",
-      activity: "All",
+      option: "All",
       rankModifier: 0,
-      multiplier: 1,
-      bonusCoin: 0,
+      productionMultiplier: 1,
       note: "No ritual selected."
-    };
-  }
+    },
+    ...ritualData.rituals
+  ];
 
-  return rituals;
+  populateControls();
+  bindEvents();
+  render();
 }
 
-function getActivities() {
-  return state.optionsData.activities || [];
+function getActivity() {
+  return state.data.activities.find(activity => activity.id === state.activityId) || state.data.activities[0];
 }
 
-function getActivityById(id = state.activityType) {
-  return getActivities().find(activity => activity.id === id);
+function getAction() {
+  const activity = getActivity();
+  return activity.actions.find(action => action.id === state.actionId) || activity.actions[0];
 }
 
-function getAssignments(activity = getActivityById()) {
-  return activity ? activity.assignments || [] : [];
-}
-
-function getAssignmentById(id = state.selectedAssignmentId) {
-  for (const activity of getActivities()) {
-    const assignment = (activity.assignments || []).find(item => item.id === id);
-    if (assignment) {
-      return {
-        ...assignment,
-        activityId: activity.id,
-        activityName: activity.name
-      };
-    }
-  }
-  return null;
-}
-
-function getMaxRank() {
-  return Number(state.optionsData.maxRank || 10);
-}
-
-function getCurrentRitual() {
-  return RITUALS[state.ritual] || RITUALS.none;
+function getRitual() {
+  return state.rituals.find(ritual => ritual.id === state.ritualId) || state.rituals[0];
 }
 
 function getEffectiveRank() {
-  const ritual = getCurrentRitual();
-  const raw = state.baseRank + state.unitUpgrade + state.regionalModifier + ritual.rankModifier;
-  return Math.max(MIN_UNIT_RANK, Math.min(getMaxRank(), raw));
+  const ritual = getRitual();
+  const raw = state.rank + state.modifier + Number(ritual.rankModifier || 0);
+  return Math.max(1, Math.min(Number(state.data.maxRank || 8), raw));
 }
 
-function isCoinReward(name) {
-  return name.toLowerCase().includes("coin") || name.toLowerCase().includes("money") || name.toLowerCase().includes("rings");
+function getLootRow() {
+  const effectiveRank = getEffectiveRank();
+  return state.data.lootTable.find(row => Number(row.rank) === effectiveRank) || state.data.lootTable[0];
 }
 
-function getRewardAmount(reward, rank = getEffectiveRank()) {
-  const ritual = getCurrentRitual();
-  let amount = Number(reward.ranks[String(rank)] ?? 0);
+function populateControls() {
+  els.activitySelect.innerHTML = state.data.activities.map(activity =>
+    `<option value="${activity.id}">${activity.name}</option>`
+  ).join("");
 
-  if (ritual.multiplier !== 1) {
-    amount = Math.floor(amount * ritual.multiplier);
+  els.rankSelect.innerHTML = "";
+  for (let i = 1; i <= Number(state.data.maxRank || 8); i += 1) {
+    els.rankSelect.insertAdjacentHTML("beforeend", `<option value="${i}">Rank ${i}</option>`);
   }
 
-  if (ritual.bonusCoin && isCoinReward(reward.name)) {
-    amount += ritual.bonusCoin;
+  els.modifierSelect.innerHTML = "";
+  for (let i = -5; i <= 5; i += 1) {
+    const label = i === 0 ? "No modifier" : i > 0 ? `+${i} campaign buff` : `${i} campaign debuff`;
+    els.modifierSelect.insertAdjacentHTML("beforeend", `<option value="${i}">${label}</option>`);
   }
 
-  return amount;
+  populateActions();
+  populateRituals();
 }
 
-function getProducedRewards(assignment = getAssignmentById(), rank = getEffectiveRank()) {
-  if (!assignment) return [];
+function populateActions() {
+  const activity = getActivity();
+  els.actionSelect.innerHTML = activity.actions.map(action =>
+    `<option value="${action.id}">${action.name}</option>`
+  ).join("");
 
-  const produced = (assignment.rewards || [])
-    .map(reward => ({
-      name: reward.name,
-      amount: getRewardAmount(reward, rank)
-    }))
-    .filter(item => item.amount > 0);
-
-  const ritual = getCurrentRitual();
-  if (ritual.bonusCoin && !produced.some(item => isCoinReward(item.name))) {
-    produced.push({ name: "Coin", amount: ritual.bonusCoin });
+  if (!activity.actions.some(action => action.id === state.actionId)) {
+    state.actionId = activity.actions[0].id;
   }
 
-  return produced;
+  els.actionSelect.value = state.actionId;
 }
 
-function populateActivitySelect() {
-  els.activityType.innerHTML = "";
+function populateRituals() {
+  const activity = getActivity();
+  const matching = state.rituals.filter(ritual => ritual.option === activity.name);
+  const all = state.rituals.filter(ritual => ritual.option === "All" && ritual.id !== "none");
 
-  getActivities().forEach(activity => {
-    const option = document.createElement("option");
-    option.value = activity.id;
-    option.textContent = activity.name;
-    els.activityType.appendChild(option);
+  const optionHtml = [
+    `<option value="none">No ritual</option>`,
+    matching.length ? `<optgroup label="${activity.name} rituals">${matching.map(ritual =>
+      `<option value="${ritual.id}">${ritual.name} — ${ritual.note}</option>`
+    ).join("")}</optgroup>` : "",
+    all.length ? `<optgroup label="All activities">${all.map(ritual =>
+      `<option value="${ritual.id}">${ritual.name} — ${ritual.note}</option>`
+    ).join("")}</optgroup>` : ""
+  ].join("");
+
+  els.ritualSelect.innerHTML = optionHtml;
+
+  if (!state.rituals.some(ritual => ritual.id === state.ritualId)) {
+    state.ritualId = "none";
+  }
+
+  els.ritualSelect.value = state.ritualId;
+}
+
+function bindEvents() {
+  els.activitySelect.addEventListener("change", event => {
+    state.activityId = event.target.value;
+    state.actionId = getActivity().actions[0].id;
+    state.ritualId = "none";
+    populateActions();
+    populateRituals();
+    render();
   });
 
-  if (!state.activityType && getActivities().length) {
-    state.activityType = getActivities()[0].id;
-  }
-
-  els.activityType.value = state.activityType;
-}
-
-function populateBaseRankSelect() {
-  els.baseRank.innerHTML = "";
-
-  for (let i = MIN_UNIT_RANK; i <= getMaxRank(); i += 1) {
-    const option = document.createElement("option");
-    option.value = String(i);
-    option.textContent = `Rank ${i}`;
-    els.baseRank.appendChild(option);
-  }
-
-  els.baseRank.value = String(state.baseRank);
-}
-
-function populateUpgradeSelect() {
-  els.unitUpgrade.innerHTML = "";
-
-  for (let i = 0; i <= getMaxRank() - MIN_UNIT_RANK; i += 1) {
-    const option = document.createElement("option");
-    option.value = String(i);
-    option.textContent = i === 0 ? "No upgrade" : `+${i} upgrade${i === 1 ? "" : "s"}`;
-    els.unitUpgrade.appendChild(option);
-  }
-
-  els.unitUpgrade.value = String(state.unitUpgrade);
-}
-
-function populateRegionalModifierSelect() {
-  els.regionalModifier.innerHTML = "";
-
-  for (let i = -4; i <= 4; i += 1) {
-    const option = document.createElement("option");
-    option.value = String(i);
-
-    if (i === 0) option.textContent = "No regional modifier";
-    else if (i > 0) option.textContent = `+${i} regional buff`;
-    else option.textContent = `${i} regional debuff`;
-
-    els.regionalModifier.appendChild(option);
-  }
-
-  els.regionalModifier.value = String(state.regionalModifier);
-}
-
-function isRitualAvailable(ritual) {
-  const activity = getActivityById();
-  if (!ritual) return false;
-  if (ritual.id === "none") return true;
-  if (ritual.activity === "All") return true;
-  return ritual.activity === activity?.name;
-}
-
-function populateRitualSelect() {
-  els.ritualSelect.innerHTML = "";
-  const activity = getActivityById();
-  const available = Object.values(RITUALS).filter(isRitualAvailable);
-
-  if (!available.some(ritual => ritual.id === state.ritual)) {
-    state.ritual = "none";
-  }
-
-  const noRitual = available.filter(ritual => ritual.id === "none");
-  const activitySpecific = available.filter(ritual => ritual.id !== "none" && ritual.activity === activity?.name);
-  const allRituals = available.filter(ritual => ritual.id !== "none" && ritual.activity === "All");
-
-  function makeOption(ritual) {
-    const option = document.createElement("option");
-    option.value = ritual.id;
-    option.textContent = ritual.note && ritual.note !== ritual.name
-      ? `${ritual.name} — ${ritual.note}`
-      : ritual.name;
-    return option;
-  }
-
-  noRitual.forEach(ritual => els.ritualSelect.appendChild(makeOption(ritual)));
-
-  if (activitySpecific.length) {
-    const group = document.createElement("optgroup");
-    group.label = `${activity.name} rituals`;
-    activitySpecific.forEach(ritual => group.appendChild(makeOption(ritual)));
-    els.ritualSelect.appendChild(group);
-  }
-
-  if (allRituals.length) {
-    const group = document.createElement("optgroup");
-    group.label = "All activities";
-    allRituals.forEach(ritual => group.appendChild(makeOption(ritual)));
-    els.ritualSelect.appendChild(group);
-  }
-
-  els.ritualSelect.value = state.ritual;
-}
-
-function populateAssignmentSelect() {
-  els.assignmentSelect.innerHTML = "";
-  const assignments = getAssignments();
-
-  assignments.forEach(assignment => {
-    const option = document.createElement("option");
-    option.value = assignment.id;
-    option.textContent = assignment.name;
-    els.assignmentSelect.appendChild(option);
+  els.actionSelect.addEventListener("change", event => {
+    state.actionId = event.target.value;
+    render();
   });
 
-  if (!assignments.some(item => item.id === state.selectedAssignmentId)) {
-    state.selectedAssignmentId = assignments[0]?.id || null;
-  }
+  els.rankSelect.addEventListener("change", event => {
+    state.rank = Number(event.target.value);
+    render();
+  });
 
-  els.assignmentSelect.value = state.selectedAssignmentId || "";
+  els.modifierSelect.addEventListener("change", event => {
+    state.modifier = Number(event.target.value);
+    render();
+  });
+
+  els.ritualSelect.addEventListener("change", event => {
+    state.ritualId = event.target.value;
+    render();
+  });
+
+  els.copySummary.addEventListener("click", copySummary);
 }
 
-function rewardRowHtml(reward, rank = getEffectiveRank()) {
-  const amount = getRewardAmount(reward, rank);
-  return `
-    <div class="reward-row">
-      <span>${reward.name}</span>
-      <strong>×${amount}</strong>
-    </div>
-  `;
-}
+function render() {
+  const activity = getActivity();
+  const action = getAction();
+  const ritual = getRitual();
+  const effectiveRank = getEffectiveRank();
 
-function renderEffectiveRank() {
-  const rank = getEffectiveRank();
-  const ritual = getCurrentRitual();
-  const activity = getActivityById();
+  els.activitySelect.value = state.activityId;
+  els.rankSelect.value = String(state.rank);
+  els.modifierSelect.value = String(state.modifier);
+  els.ritualSelect.value = state.ritualId;
 
-  els.effectiveRankDisplay.textContent = rank;
-
-  const parts = [`Base rank ${state.baseRank}`];
-  if (state.unitUpgrade) parts.push(`+${state.unitUpgrade} upgrade`);
-  if (state.regionalModifier) parts.push(`${state.regionalModifier > 0 ? "+" : ""}${state.regionalModifier} regional`);
-  if (ritual.rankModifier) parts.push(`${ritual.rankModifier > 0 ? "+" : ""}${ritual.rankModifier} ${ritual.name}`);
-
-  els.effectiveRankNote.textContent = `${activity?.name || "Military activity"}: ${parts.join(" ")} = Effective Unit Rank ${rank}`;
   els.ritualNote.textContent = ritual.note;
+  els.effectiveRank.textContent = effectiveRank;
 
-  const bonusCoinRow = ritual.bonusCoin
-    ? `<div class="breakdown-row"><span>Bonus Coin</span><strong>+${ritual.bonusCoin} included below</strong></div>`
-    : "";
-
-  els.modifierBreakdown.innerHTML = `
-    <div class="breakdown-row"><span>Activity</span><strong>${activity?.name || "N/A"}</strong></div>
-    <div class="breakdown-row"><span>Base unit rank</span><strong>${state.baseRank}</strong></div>
-    <div class="breakdown-row"><span>Unit upgrade</span><strong>+${state.unitUpgrade}</strong></div>
-    <div class="breakdown-row"><span>Regional buff/debuff</span><strong>${state.regionalModifier > 0 ? "+" : ""}${state.regionalModifier}</strong></div>
+  els.breakdown.innerHTML = `
+    <div class="breakdown-row"><span>Activity</span><strong>${activity.name}</strong></div>
+    <div class="breakdown-row"><span>Base rank</span><strong>${state.rank}</strong></div>
+    <div class="breakdown-row"><span>Campaign modifier</span><strong>${state.modifier > 0 ? "+" : ""}${state.modifier}</strong></div>
     <div class="breakdown-row"><span>Ritual</span><strong>${ritual.name}</strong></div>
     <div class="breakdown-row"><span>Ritual rank change</span><strong>${ritual.rankModifier > 0 ? "+" : ""}${ritual.rankModifier}</strong></div>
-    <div class="breakdown-row"><span>Result multiplier</span><strong>${ritual.multiplier === 1 ? "×1" : `×${ritual.multiplier}`}</strong></div>
-    ${bonusCoinRow}
-    <div class="breakdown-row breakdown-row--total"><span>Effective unit rank</span><strong>${rank}</strong></div>
   `;
+
+  els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
+  els.actionTitle.textContent = action.name;
+  els.actionDescription.textContent = action.description;
+
+  renderOutput(action);
 }
 
-function renderAssignments() {
-  const assignments = getAssignments();
-  const rank = getEffectiveRank();
-  const activity = getActivityById();
+function renderOutput(action) {
+  if (action.type === "loot") {
+    const row = getLootRow();
+    const multiplier = Number(getRitual().productionMultiplier || 1);
+    const productionLabel = multiplier === 1 ? row.label : `${Math.ceil(row.production * multiplier)} random resources after ritual modifier`;
 
-  els.assignments.innerHTML = "";
-  els.emptyState.hidden = assignments.length !== 0;
-
-  assignments.forEach(assignment => {
-    const card = document.createElement("article");
-    card.className = "assignment-card";
-    if (assignment.id === state.selectedAssignmentId) card.classList.add("assignment-card--selected");
-
-    const rewards = (assignment.rewards || []).slice(0, 5);
-
-    card.innerHTML = `
-      <div class="assignment-card__header">
-        <div>
-          <h3>${assignment.name}</h3>
-          <span class="type-pill">${assignment.type || activity.name}</span>
-        </div>
-        <span class="rank-pill">Rank ${rank}</span>
-      </div>
-      <p>${assignment.description || "No description yet."}</p>
-      <div class="rewards-list">
-        ${rewards.map(reward => rewardRowHtml(reward, rank)).join("")}
-      </div>
-      <div class="card-actions">
-        <button type="button" data-action="choose" data-assignment-id="${assignment.id}">${assignment.id === state.selectedAssignmentId ? "Selected" : "Choose"}</button>
-        <button type="button" data-action="details" data-assignment-id="${assignment.id}">Details</button>
-      </div>
+    els.lootOutput.innerHTML = `
+      <div class="loot-card"><span>Production</span><strong>${productionLabel}</strong></div>
+      <div class="loot-card"><span>25% Resources</span><strong>${row.resources}</strong></div>
+      <div class="loot-card"><span>25% Money</span><strong>${row.money}</strong></div>
+      <div class="loot-card"><span>25% Mana</span><strong>${row.mana}</strong></div>
+      <div class="loot-card"><span>25% Herbs</span><strong>${row.herbs}</strong></div>
     `;
-
-    els.assignments.appendChild(card);
-  });
-}
-
-function renderSelectedOutput() {
-  const assignment = getAssignmentById();
-  const produced = getProducedRewards(assignment);
-
-  if (!assignment) {
-    els.resultSummary.innerHTML = `<p class="empty-mini">Choose an assignment.</p>`;
     return;
   }
 
-  if (!produced.length) {
-    els.resultSummary.innerHTML = `<p class="empty-mini">No result at effective rank ${getEffectiveRank()}.</p>`;
+  if (action.type === "guerdon") {
+    els.lootOutput.innerHTML = `
+      <div class="loot-card"><span>Income</span><strong>Only if Imperial guerdon applies</strong></div>
+      <div class="loot-card"><span>Contribution</span><strong>Effective rank ${getEffectiveRank()}</strong></div>
+      <div class="loot-card"><span>Note</span><strong>Adds unit strength to the selected army, fortification, or spy network.</strong></div>
+    `;
     return;
   }
 
-  els.resultSummary.innerHTML = produced.map(item => `
-    <div class="summary-item">
-      <span>${item.name}</span>
-      <strong>×${item.amount}</strong>
-    </div>
-  `).join("");
-}
-
-function renderAll() {
-  populateRitualSelect();
-  populateAssignmentSelect();
-  renderEffectiveRank();
-  renderAssignments();
-  renderSelectedOutput();
-  saveState();
-}
-
-function chooseAssignment(id) {
-  state.selectedAssignmentId = id;
-  renderAll();
-  const assignment = getAssignmentById(id);
-  showToast(`${assignment.name} selected.`);
-}
-
-function openDetails(id) {
-  const assignment = getAssignmentById(id);
-  const rank = getEffectiveRank();
-  if (!assignment) return;
-
-  els.dialogContent.innerHTML = `
-    <p class="eyebrow">${assignment.activityName}</p>
-    <h2>${assignment.name}</h2>
-    <p>${assignment.description || "No description yet."}</p>
-    <p class="subtitle">Results shown for effective unit rank ${rank}.</p>
-    <div class="dialog-reward-grid">
-      ${(assignment.rewards || []).map(reward => rewardRowHtml(reward, rank)).join("")}
-    </div>
+  els.lootOutput.innerHTML = `
+    <div class="loot-card"><span>Outcome</span><strong>Narrative or plot result</strong></div>
+    <div class="loot-card"><span>Income</span><strong>None unless the plot option states otherwise</strong></div>
   `;
-
-  if (typeof els.detailsDialog.showModal === "function") els.detailsDialog.showModal();
-  else alert(`${assignment.name}\n${getProducedRewards(assignment, rank).map(item => `${item.name}: ${item.amount}`).join("\n")}`);
 }
 
-function copySummary() {
-  const assignment = getAssignmentById();
-  const rank = getEffectiveRank();
-  const characterName = els.characterName.value.trim() || "Not provided";
-  const unitName = els.unitName.value.trim() || "Not provided";
-  const activity = getActivityById();
-  const ritual = getCurrentRitual();
+function getSummaryLines() {
+  const character = els.characterName.value.trim() || "Not provided";
+  const unit = els.unitName.value.trim() || "Not provided";
+  const activity = getActivity();
+  const action = getAction();
+  const ritual = getRitual();
 
   const lines = [
     "Empire Military Downtime Tool",
     "",
-    `Character: ${characterName}`,
-    `Military Unit: ${unitName}`,
+    `Character: ${character}`,
+    `Military Unit: ${unit}`,
     "",
-    `Activity: ${activity?.name || "N/A"}`,
-    `Assignment: ${assignment ? assignment.name : "None selected"}`,
-    `Base unit rank: ${state.baseRank}`,
-    `${ritual.name}; Upgrade +${state.unitUpgrade}, Regional modifier ${state.regionalModifier > 0 ? "+" : ""}${state.regionalModifier}`,
-    `Effective Unit Rank: ${rank}`,
+    `Activity: ${activity.name}`,
+    `Action: ${action.name}`,
+    `Base Rank: ${state.rank}`,
+    `Campaign Modifier: ${state.modifier > 0 ? "+" : ""}${state.modifier}`,
+    `Ritual: ${ritual.name}`,
+    `Effective Rank: ${getEffectiveRank()}`,
     "",
-    "Downtime result:"
+    "Downtime Result:"
   ];
 
-  getProducedRewards(assignment, rank).forEach(item => {
-    lines.push(`${item.name}: ${item.amount}`);
-  });
-
-  const text = lines.join("\n");
-
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text)
-      .then(() => showToast("Summary copied."))
-      .catch(() => fallbackCopyText(text));
+  if (action.type === "loot") {
+    const row = getLootRow();
+    lines.push(`Production: ${row.label}`);
+    lines.push(`25% Resources: ${row.resources}`);
+    lines.push(`25% Money: ${row.money}`);
+    lines.push(`25% Mana: ${row.mana}`);
+    lines.push(`25% Herbs: ${row.herbs}`);
+  } else if (action.type === "guerdon") {
+    lines.push("Income: Only if Imperial guerdon applies.");
+    lines.push(`Contribution: Effective rank ${getEffectiveRank()}.`);
   } else {
-    fallbackCopyText(text);
-  }
-}
-
-function fallbackCopyText(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
-
-  try {
-    document.execCommand("copy");
-    showToast("Summary copied.");
-  } catch {
-    showToast("Could not copy summary.");
+    lines.push("Outcome: Narrative or plot result.");
   }
 
-  textarea.remove();
+  return lines;
 }
 
-function resetPlanner() {
-  state.baseRank = DEFAULT_UNIT_RANK;
-  state.unitUpgrade = 0;
-  state.regionalModifier = 0;
-  state.ritual = "none";
-  state.activityType = getActivities()[0]?.id || null;
-  state.selectedAssignmentId = getAssignments(getActivityById(state.activityType))[0]?.id || null;
-  syncControlsFromState();
-  renderAll();
+async function copySummary() {
+  const text = getSummaryLines().join("\n");
+  await navigator.clipboard.writeText(text);
+  const oldText = els.copySummary.textContent;
+  els.copySummary.textContent = "Copied!";
+  setTimeout(() => {
+    els.copySummary.textContent = oldText;
+  }, 1200);
 }
 
-function saveState() {
-  const payload = {
-    baseRank: state.baseRank,
-    unitUpgrade: state.unitUpgrade,
-    regionalModifier: state.regionalModifier,
-    ritual: state.ritual,
-    activityType: state.activityType,
-    selectedAssignmentId: state.selectedAssignmentId
-  };
-
-  localStorage.setItem("empireMilitaryDowntime.starter", JSON.stringify(payload));
-}
-
-function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem("empireMilitaryDowntime.starter") || "{}");
-    state.baseRank = Number(saved.baseRank || DEFAULT_UNIT_RANK);
-    state.unitUpgrade = Number(saved.unitUpgrade || 0);
-    state.regionalModifier = Number(saved.regionalModifier || 0);
-    state.ritual = saved.ritual && RITUALS[saved.ritual] ? saved.ritual : "none";
-    state.activityType = getActivities().some(activity => activity.id === saved.activityType)
-      ? saved.activityType
-      : getActivities()[0]?.id || null;
-    state.selectedAssignmentId = saved.selectedAssignmentId || getAssignments()[0]?.id || null;
-  } catch {
-    state.activityType = getActivities()[0]?.id || null;
-    state.selectedAssignmentId = getAssignments()[0]?.id || null;
-  }
-}
-
-function syncControlsFromState() {
-  els.activityType.value = state.activityType || "";
-  els.baseRank.value = String(state.baseRank);
-  els.unitUpgrade.value = String(state.unitUpgrade);
-  els.regionalModifier.value = String(state.regionalModifier);
-  els.ritualSelect.value = state.ritual;
-  els.assignmentSelect.value = state.selectedAssignmentId || "";
-}
-
-function bindEvents() {
-  els.activityType.addEventListener("change", event => {
-    state.activityType = event.target.value;
-    state.selectedAssignmentId = getAssignments()[0]?.id || null;
-
-    const ritual = getCurrentRitual();
-    if (state.ritual !== "none" && !isRitualAvailable(ritual)) state.ritual = "none";
-
-    renderAll();
-  });
-
-  els.baseRank.addEventListener("change", event => {
-    state.baseRank = Number(event.target.value);
-    renderAll();
-  });
-
-  els.unitUpgrade.addEventListener("change", event => {
-    state.unitUpgrade = Number(event.target.value);
-    renderAll();
-  });
-
-  els.ritualSelect.addEventListener("change", event => {
-    state.ritual = event.target.value;
-    renderAll();
-  });
-
-  els.regionalModifier.addEventListener("change", event => {
-    state.regionalModifier = Number(event.target.value);
-    renderAll();
-  });
-
-  els.assignmentSelect.addEventListener("change", event => {
-    chooseAssignment(event.target.value);
-  });
-
-  els.resetPlanner.addEventListener("click", resetPlanner);
-  els.copySummary.addEventListener("click", copySummary);
-  els.closeDialog.addEventListener("click", () => els.detailsDialog.close());
-
-  els.assignments.addEventListener("click", event => {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
-
-    if (button.dataset.action === "choose") chooseAssignment(button.dataset.assignmentId);
-    if (button.dataset.action === "details") openDetails(button.dataset.assignmentId);
-  });
-}
-
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2200);
-}
-
-async function loadJson(path) {
-  const response = await fetch(path, { cache: "no-store" });
-  if (!response.ok) throw new Error(`Could not load ${path}: ${response.status}`);
-  return response.json();
-}
-
-async function init() {
-  getElements();
-
-  if (!requiredElementsExist()) {
-    showFatalError("The HTML file is missing required planner elements. Upload index.html, style.css, script.js, military-options.json, and military-rituals.json together.");
-    console.error("Missing elements", els);
-    return;
-  }
-
-  try {
-    const [optionsData, ritualsData] = await Promise.all([
-      loadJson("military-options.json"),
-      loadJson("military-rituals.json")
-    ]);
-
-    state.optionsData = optionsData;
-    state.ritualsData = ritualsData;
-    RITUALS = buildRituals(ritualsData);
-
-    populateActivitySelect();
-    populateBaseRankSelect();
-    populateUpgradeSelect();
-    populateRegionalModifierSelect();
-    loadState();
-    populateActivitySelect();
-    populateBaseRankSelect();
-    populateUpgradeSelect();
-    populateRegionalModifierSelect();
-    populateRitualSelect();
-    populateAssignmentSelect();
-    syncControlsFromState();
-    bindEvents();
-    renderAll();
-  } catch (error) {
-    showFatalError(`${error.message}. Make sure military-options.json and military-rituals.json are in the same folder as index.html.`);
-    console.error(error);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", init);
+init().catch(error => {
+  console.error(error);
+  document.body.insertAdjacentHTML("afterbegin", `<p style="background:#ffd6d6;color:#4a0000;padding:1rem;">Could not load military data files. Check that military-options.json and military-rituals.json are uploaded beside index.html.</p>`);
+});

@@ -1,71 +1,211 @@
 {
-  "version": "0.1",
-  "maxRank": 10,
+  "version": "starter-1.0",
+  "maxRank": 8,
+  "lootTable": [
+    {
+      "rank": 1,
+      "production": 4,
+      "label": "4 random resources",
+      "resources": "4 ingots or measures",
+      "money": "72 rings",
+      "mana": "3 mana crystals",
+      "herbs": "3 True Vervain, 1 Cerulean Mazzarine, 1 Bladeroot, 1 Imperial Roseweald, 1 Marrowort"
+    },
+    {
+      "rank": 2,
+      "production": 6,
+      "label": "6 random resources",
+      "resources": "6 ingots or measures",
+      "money": "108 rings",
+      "mana": "4 mana crystals",
+      "herbs": "4 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+    },
+    {
+      "rank": 3,
+      "production": 8,
+      "label": "8 random resources",
+      "resources": "8 ingots or measures",
+      "money": "144 rings",
+      "mana": "6 mana crystals",
+      "herbs": "5 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+    },
+    {
+      "rank": 4,
+      "production": 10,
+      "label": "10 random resources",
+      "resources": "10 ingots or measures",
+      "money": "180 rings",
+      "mana": "7 mana crystals",
+      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort"
+    },
+    {
+      "rank": 5,
+      "production": 12,
+      "label": "12 random resources",
+      "resources": "12 ingots or measures",
+      "money": "216 rings",
+      "mana": "8 mana crystals",
+      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 2 random herbs"
+    },
+    {
+      "rank": 6,
+      "production": 14,
+      "label": "14 random resources",
+      "resources": "14 ingots or measures",
+      "money": "252 rings",
+      "mana": "10 mana crystals",
+      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 4 random herbs"
+    },
+    {
+      "rank": 7,
+      "production": 16,
+      "label": "16 random resources",
+      "resources": "16 ingots or measures",
+      "money": "288 rings",
+      "mana": "11 mana crystals",
+      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 6 random herbs"
+    },
+    {
+      "rank": 8,
+      "production": 18,
+      "label": "18 random resources",
+      "resources": "18 ingots or measures",
+      "money": "324 rings",
+      "mana": "13 mana crystals",
+      "herbs": "6 True Vervain, 2 Cerulean Mazzarine, 2 Bladeroot, 2 Imperial Roseweald, 2 Marrowort, 8 random herbs"
+    }
+  ],
   "activities": [
     {
       "id": "campaigning",
       "name": "Campaigning",
-      "assignments": [
+      "description": "Support military armies on campaign to take or defend territory.",
+      "actions": [
         {
-          "id": "hold-the-line",
-          "name": "Hold the Line",
-          "type": "Defensive action",
-          "description": "Placeholder assignment for defending a strategic position.",
-          "rewards": [
-            { "name": "Military Glory", "ranks": { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10 } },
-            { "name": "Coin", "ranks": { "1": 0, "2": 0, "3": 10, "4": 15, "5": 20, "6": 25, "7": 30, "8": 35, "9": 40, "10": 50 } }
-          ]
+          "id": "support-imperial-army",
+          "name": "Support an Imperial Army",
+          "type": "guerdon",
+          "default": true,
+          "description": "Adds your military strength to an army. Income only applies if that army receives Imperial guerdon."
         },
         {
-          "id": "press-the-attack",
-          "name": "Press the Attack",
-          "type": "Offensive action",
-          "description": "Placeholder assignment for aggressive action against an enemy force.",
-          "rewards": [
-            { "name": "Spoils", "ranks": { "1": 1, "2": 1, "3": 2, "4": 2, "5": 3, "6": 3, "7": 4, "8": 4, "9": 5, "10": 5 } },
-            { "name": "Casualty Risk", "ranks": { "1": 3, "2": 3, "3": 3, "4": 2, "5": 2, "6": 2, "7": 1, "8": 1, "9": 1, "10": 1 } }
-          ]
+          "id": "campaign-plot-option",
+          "name": "Campaigning Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific campaign opportunities added during play."
         }
       ]
     },
     {
-      "id": "patrol",
-      "name": "Patrol",
-      "assignments": [
+      "id": "raiding",
+      "name": "Raiding",
+      "description": "Launch a foray against enemies of the Empire, focused on disruption, looting, and enemy combatants.",
+      "actions": [
         {
-          "id": "secure-roads",
-          "name": "Secure the Roads",
-          "type": "Security duty",
-          "description": "Placeholder assignment for protecting roads and settlements.",
-          "rewards": [
-            { "name": "Public Order", "ranks": { "1": 1, "2": 1, "3": 2, "4": 2, "5": 3, "6": 3, "7": 4, "8": 4, "9": 5, "10": 5 } },
-            { "name": "Coin", "ranks": { "1": 5, "2": 10, "3": 15, "4": 20, "5": 25, "6": 30, "7": 35, "8": 40, "9": 45, "10": 50 } }
-          ]
+          "id": "raid-jotun",
+          "name": "Raid the Jotun",
+          "type": "loot",
+          "default": true,
+          "description": "A legal raid against the Jotun. Provides random resource loot by effective rank."
         },
         {
-          "id": "border-watch",
-          "name": "Border Watch",
-          "type": "Scouting duty",
-          "description": "Placeholder assignment for watching enemy movement.",
-          "rewards": [
-            { "name": "Intelligence", "ranks": { "1": 1, "2": 2, "3": 2, "4": 3, "5": 3, "6": 4, "7": 4, "8": 5, "9": 5, "10": 6 } }
-          ]
+          "id": "raid-druj",
+          "name": "Raid the Druj",
+          "type": "loot",
+          "default": true,
+          "description": "A legal raid against the Druj. Provides random resource loot by effective rank."
+        },
+        {
+          "id": "raid-grendel",
+          "name": "Raid the Grendel",
+          "type": "loot",
+          "default": true,
+          "description": "A legal raid against the Grendel. Provides random resource loot by effective rank."
+        },
+        {
+          "id": "raiding-plot-option",
+          "name": "Raiding Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific raiding opportunities added during play."
         }
       ]
     },
     {
-      "id": "raid",
-      "name": "Raid",
-      "assignments": [
+      "id": "guarding",
+      "name": "Guarding",
+      "description": "Defensive work such as garrisoning a fortification, escorting caravans, or protecting Imperial interests.",
+      "actions": [
         {
-          "id": "strike-supply-lines",
-          "name": "Strike Supply Lines",
-          "type": "Raid",
-          "description": "Placeholder assignment for disrupting enemy logistics.",
-          "rewards": [
-            { "name": "Spoils", "ranks": { "1": 0, "2": 1, "3": 1, "4": 2, "5": 2, "6": 3, "7": 3, "8": 4, "9": 4, "10": 5 } },
-            { "name": "Enemy Disruption", "ranks": { "1": 1, "2": 1, "3": 2, "4": 2, "5": 3, "6": 3, "7": 4, "8": 4, "9": 5, "10": 5 } }
-          ]
+          "id": "mercenary-work",
+          "name": "Mercenary Work",
+          "type": "loot",
+          "default": true,
+          "description": "Default military downtime if no action is selected. Provides random resource loot by effective rank."
+        },
+        {
+          "id": "defend-fortification",
+          "name": "Defend a Fortification",
+          "type": "guerdon",
+          "default": true,
+          "description": "Adds your military strength to a fortification. Income only applies if the fortification receives Imperial guerdon."
+        },
+        {
+          "id": "guarding-plot-option",
+          "name": "Guarding Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific guarding opportunities added during play."
+        }
+      ]
+    },
+    {
+      "id": "scouting",
+      "name": "Scouting",
+      "description": "Infiltration, exploration, reconnaissance, and gathering information in dangerous places.",
+      "actions": [
+        {
+          "id": "bounty-hunting",
+          "name": "Bounty Hunting",
+          "type": "loot",
+          "default": true,
+          "description": "Track criminals or threats to Imperial citizens. Provides random resource loot by effective rank."
+        },
+        {
+          "id": "support-spy-network",
+          "name": "Support an Imperial Spy Network",
+          "type": "guerdon",
+          "default": true,
+          "description": "Adds your military strength to a spy network. Income only applies if the spy network receives Imperial guerdon."
+        },
+        {
+          "id": "scouting-plot-option",
+          "name": "Scouting Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific scouting opportunities added during play."
+        }
+      ]
+    },
+    {
+      "id": "questing",
+      "name": "Questing",
+      "description": "Seek danger in search of treasure, experience, and opportunities for glory.",
+      "actions": [
+        {
+          "id": "seek-glory",
+          "name": "Seek Glory",
+          "type": "loot",
+          "default": true,
+          "description": "Venture into dangerous or unknown places. Provides unpredictable random resource loot by effective rank."
+        },
+        {
+          "id": "questing-plot-option",
+          "name": "Questing Plot Option",
+          "type": "narrative",
+          "default": false,
+          "description": "Placeholder for specific questing opportunities added during play."
         }
       ]
     }

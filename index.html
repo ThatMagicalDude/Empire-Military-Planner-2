@@ -4,29 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empire Military Downtime Tool</title>
-  <meta name="description" content="Starter military downtime planning tool for Empire-style downtime actions." />
+  <meta name="description" content="Starter military downtime planner for Empire military units." />
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__content">
-      <p class="eyebrow">Downtime Tool</p>
-      <h1>Empire Military Downtime Tool</h1>
-      <p class="subtitle">Choose a military activity, select an assignment, apply buffs or debuffs, and copy a downtime summary.</p>
-    </div>
+  <header class="site-header">
+    <p class="eyebrow">Empire Downtime</p>
+    <h1>Military Downtime Tool</h1>
+    <p class="subtitle">Plan military unit downtime, apply enchantments, and view expected loot, guerdon, or narrative outcomes.</p>
   </header>
 
   <main class="app-shell">
-    <section class="panel controls-panel" aria-labelledby="controls-heading">
-      <div class="section-title-row">
-        <div>
-          <p class="eyebrow">Military Setup</p>
-          <h2 id="controls-heading">Calculate effective unit rank</h2>
-        </div>
-        <button class="ghost-button" id="resetPlanner" type="button">Reset</button>
-      </div>
-
-      <div class="controls-grid controls-grid--setup">
+    <section class="panel controls-panel">
+      <div class="controls-grid controls-grid--names">
         <label class="control">
           <span>Character Name</span>
           <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
@@ -36,89 +27,67 @@
           <span>Military Unit Name</span>
           <input id="unitName" type="text" placeholder="e.g. Bloodforge Company" />
         </label>
+      </div>
 
+      <div class="controls-grid">
         <label class="control">
           <span>Military Activity</span>
-          <select id="activityType"></select>
+          <select id="activitySelect"></select>
         </label>
 
         <label class="control">
-          <span>Base Unit Rank</span>
-          <select id="baseRank"></select>
+          <span>Military Action</span>
+          <select id="actionSelect"></select>
         </label>
 
         <label class="control">
-          <span>Unit Upgrade</span>
-          <select id="unitUpgrade"></select>
+          <span>Unit Rank</span>
+          <select id="rankSelect"></select>
         </label>
 
         <label class="control">
-          <span>Ritual / Special Effect</span>
+          <span>Campaign Buff/Debuff</span>
+          <select id="modifierSelect"></select>
+        </label>
+
+        <label class="control control--wide">
+          <span>Military Enchantment / Ritual</span>
           <select id="ritualSelect"></select>
         </label>
-
-        <label class="control">
-          <span>Regional Buff/Debuff</span>
-          <select id="regionalModifier"></select>
-        </label>
       </div>
 
-      <div class="effective-box" aria-live="polite">
-        <div>
-          <span class="stat-card__label">Effective Unit Rank</span>
-          <strong id="effectiveRankDisplay">1</strong>
-        </div>
-        <p id="effectiveRankNote">Default unit rank with no modifiers.</p>
-      </div>
-
-      <p id="ritualNote" class="ritual-note">No ritual selected.</p>
+      <p id="ritualNote" class="note">No ritual selected.</p>
     </section>
 
     <section class="planner-layout">
-      <aside class="panel summary-panel" aria-labelledby="summary-heading">
-        <div class="section-title-row">
-          <div>
-            <p class="eyebrow">Planner</p>
-            <h2 id="summary-heading">Your Military Unit</h2>
-          </div>
-          <button class="ghost-button" id="copySummary" type="button">Copy summary</button>
+      <aside class="panel result-panel">
+        <p class="eyebrow">Result</p>
+        <h2>Downtime Result</h2>
+
+        <div class="rank-card">
+          <span>Effective Rank</span>
+          <strong id="effectiveRank">1</strong>
         </div>
 
-        <label class="control">
-          <span>Assignment</span>
-          <select id="assignmentSelect"></select>
-        </label>
+        <div id="breakdown" class="breakdown"></div>
 
-        <div class="modifier-breakdown" id="modifierBreakdown"></div>
-
-        <div class="summary-box">
-          <h3>Downtime result</h3>
-          <div id="resultSummary" class="summary-list"></div>
-        </div>
+        <button id="copySummary" class="primary-button" type="button">Copy Summary</button>
       </aside>
 
-      <section class="assignments-section" aria-labelledby="assignments-heading">
-        <div class="section-title-row section-title-row--assignments">
-          <div>
-            <p class="eyebrow" id="listEyebrow">Assignments</p>
-            <h2 id="assignments-heading">Available assignments</h2>
-          </div>
-        </div>
+      <section class="panel output-panel">
+        <p class="eyebrow" id="actionType">Loot</p>
+        <h2 id="actionTitle">Mercenary Work</h2>
+        <p id="actionDescription" class="subtitle"></p>
 
-        <div id="assignments" class="cards-grid"></div>
-        <p id="emptyState" class="empty-state" hidden>No assignments found.</p>
+        <div id="lootOutput" class="loot-grid"></div>
+
+        <div class="rules-note">
+          <h3>Random Resources</h3>
+          <p>Random resources mean a 25% chance to receive either herbs, mana, money, or crafting resources. Use the result as a spring-board for what your military unit has been doing during downtime.</p>
+        </div>
       </section>
     </section>
   </main>
-
-  <footer class="site-credit">
-    <p>Starter military downtime tool. Replace the placeholder data with your campaign tables.</p>
-  </footer>
-
-  <dialog id="detailsDialog" class="details-dialog">
-    <button class="dialog-close" id="closeDialog" type="button" aria-label="Close">×</button>
-    <div id="dialogContent"></div>
-  </dialog>
 
   <script src="script.js" defer></script>
 </body>
