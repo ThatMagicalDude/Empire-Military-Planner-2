@@ -50,30 +50,93 @@ body::before {
   opacity: 0.35;
 }
 
+/* =========================
+   Header - Fleet-style layout
+   ========================= */
+
 .site-header {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem 1rem;
+  padding: 1.5rem 1rem 2rem;
   text-align: center;
 }
 
-.site-header h1,
-h2,
-h3,
-.summary-box h3 {
-  font-family: "Viner Hand ITC", "Papyrus", Georgia, serif;
+.site-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr 60px;
+  align-items: start;
+  gap: 1rem;
+}
+
+.site-header__content {
+  text-align: center;
+}
+
+.header-mark {
+  color: #e0c06b;
+  font-size: 2rem;
+  line-height: 1;
+  margin-top: 0.5rem;
+  opacity: 0.95;
+}
+
+.header-mark--left {
+  justify-self: center;
+}
+
+.header-mark--right {
+  justify-self: center;
+}
+
+.site-header .eyebrow {
+  margin: 0 0 0.5rem;
+  color: #d8a948;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .site-header h1 {
-  margin: 0.25rem 0;
-  font-size: clamp(2.4rem, 6vw, 5rem);
-  letter-spacing: 0.05em;
-  color: var(--steel-light);
+  margin: 0;
+  font-family: "Viner Hand ITC", "Papyrus", Georgia, serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  color: #f2dfb2;
   text-shadow:
-    0 2px 0 #080606,
-    0 0 18px rgba(183, 51, 56, 0.45);
+    0 2px 0 rgba(0, 0, 0, 0.45),
+    0 0 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.01em;
 }
 
+.site-header .subtitle {
+  max-width: 900px;
+  margin: 1.5rem auto 0;
+  color: #f0d18b;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .site-header__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .header-mark {
+    display: none;
+  }
+
+  .site-header h1 {
+    font-size: clamp(2.4rem, 12vw, 4rem);
+  }
+
+  .site-header .subtitle {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
+}
 .subtitle {
   color: var(--muted-cream);
   font-size: 1.05rem;
