@@ -511,9 +511,17 @@ button:active { transform: translateY(0); }
   color: var(--ink) !important;
 }
 /* Remove stray outer layout box */
-.planner-layout,
-.actions-section,
-.app-shell {
+.panel,
+.controls-panel,
+.planner-card,
+.result-panel,
+.action-card,
+.port-card,
+.assignment-card,
+.military-card,
+.dialog,
+.port-dialog,
+.action-dialog {
   border: 0 !important;
   outline: 0 !important;
   box-shadow: none !important;
