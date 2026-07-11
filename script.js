@@ -185,12 +185,33 @@ function render() {
   els.effectiveRank.textContent = effectiveRank;
 
   els.breakdown.innerHTML = `
-    <div class="breakdown-row"><span>Activity</span><strong>${activity.name}</strong></div>
-    <div class="breakdown-row"><span>Base rank</span><strong>${state.rank}</strong></div>
-    <div class="breakdown-row"><span>Campaign modifier</span><strong>${state.modifier > 0 ? "+" : ""}${state.modifier}</strong></div>
-    <div class="breakdown-row"><span>Ritual</span><strong>${ritual.name}</strong></div>
-    <div class="breakdown-row"><span>Ritual rank change</span><strong>${ritual.rankModifier > 0 ? "+" : ""}${ritual.rankModifier}</strong></div>
-  `;
+  <div class="breakdown-row">
+    <span>Activity</span>
+    <strong>${activity.name}</strong>
+  </div>
+  <div class="breakdown-row">
+    <span>Base rank</span>
+    <strong>${state.rank}</strong>
+  </div>
+  <div class="breakdown-row">
+    <span>Campaign modifier</span>
+    <strong>${state.modifier > 0 ? "+" : ""}${state.modifier}</strong>
+  </div>
+  <div class="breakdown-row">
+    <span>Ritual</span>
+    <strong>${ritual.name}</strong>
+  </div>
+  <div class="breakdown-row">
+    <span>Ritual rank change</span>
+    <strong>${ritual.rankModifier > 0 ? "+" : ""}${ritual.rankModifier}</strong>
+  </div>
+  <div class="breakdown-row breakdown-row--total">
+    <span>Effective rank</span>
+    <strong>${effectiveRank}</strong>
+  </div>
+`;
+
+}
 
   els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
   els.actionTitle.textContent = action.name;
@@ -206,27 +227,57 @@ function renderOutput(action) {
     const productionLabel = multiplier === 1 ? row.label : `${Math.ceil(row.production * multiplier)} random resources after ritual modifier`;
 
     els.lootOutput.innerHTML = `
-      <div class="loot-card"><span>Production</span><strong>${productionLabel}</strong></div>
-      <div class="loot-card"><span>25% Resources</span><strong>${row.resources}</strong></div>
-      <div class="loot-card"><span>25% Money</span><strong>${row.money}</strong></div>
-      <div class="loot-card"><span>25% Mana</span><strong>${row.mana}</strong></div>
-      <div class="loot-card"><span>25% Herbs</span><strong>${row.herbs}</strong></div>
-    `;
+  <div class="summary-item">
+    <span>Production</span>
+    <strong>${productionLabel}</strong>
+  </div>
+  <div class="summary-item">
+    <span>25% Resources</span>
+    <strong>${row.resources}</strong>
+  </div>
+  <div class="summary-item">
+    <span>25% Money</span>
+    <strong>${row.money}</strong>
+  </div>
+  <div class="summary-item">
+    <span>25% Mana</span>
+    <strong>${row.mana}</strong>
+  </div>
+  <div class="summary-item">
+    <span>25% Herbs</span>
+    <strong>${row.herbs}</strong>
+  </div>
+`;
     return;
   }
 
   if (action.type === "guerdon") {
     els.lootOutput.innerHTML = `
-      <div class="loot-card"><span>Income</span><strong>Only if Imperial guerdon applies</strong></div>
-      <div class="loot-card"><span>Contribution</span><strong>Effective rank ${getEffectiveRank()}</strong></div>
-      <div class="loot-card"><span>Note</span><strong>Adds unit strength to the selected army, fortification, or spy network.</strong></div>
-    `;
+  <div class="summary-item">
+    <span>Income</span>
+    <strong>Only if Imperial guerdon applies</strong>
+  </div>
+  <div class="summary-item">
+    <span>Contribution</span>
+    <strong>Effective rank ${getEffectiveRank()}</strong>
+  </div>
+  <div class="summary-item">
+    <span>Note</span>
+    <strong>Adds unit strength to the selected army, fortification, or spy network.</strong>
+  </div>
+`;
     return;
   }
 
   els.lootOutput.innerHTML = `
-    <div class="loot-card"><span>Outcome</span><strong>Narrative or plot result</strong></div>
-    <div class="loot-card"><span>Income</span><strong>None unless the plot option states otherwise</strong></div>
+  <div class="summary-item">
+    <span>Outcome</span>
+    <strong>Narrative or plot result</strong>
+  </div>
+  <div class="summary-item">
+    <span>Income</span>
+    <strong>None unless the plot option states otherwise</strong>
+  </div>
   `;
 }
 
