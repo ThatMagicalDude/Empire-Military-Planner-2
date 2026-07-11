@@ -570,3 +570,166 @@ button:active {
     font-size: 2.2rem;
   }
 }
+/* Fleet-style Military Summary Panel */
+
+.planner-card,
+.result-panel {
+  background:
+    linear-gradient(180deg, rgba(248, 236, 196, 0.96), rgba(226, 203, 151, 0.96));
+  color: #2b1a0f;
+  border: 3px double #8b6a3d;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.25),
+    0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+.planner-card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(75, 45, 25, 0.45);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.planner-card .eyebrow,
+.result-panel .eyebrow {
+  color: #c49442;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.planner-card h2,
+.result-panel h2,
+.summary-box h3 {
+  font-family: "Viner Hand ITC", "Papyrus", Georgia, serif;
+  color: #8b1f24;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.planner-card h2,
+.result-panel h2 {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.planner-card .control {
+  margin-bottom: 0.85rem;
+}
+
+.planner-card .control span {
+  color: #3a2415;
+  font-weight: 700;
+}
+
+.planner-card input,
+.planner-card select,
+.planner-card .static-value {
+  background: linear-gradient(180deg, #fff4cf, #ead7a1);
+  color: #2b1a0f;
+  border: 1px solid #b88a4a;
+  border-radius: 4px;
+  min-height: 42px;
+  padding: 0.7rem 0.85rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+}
+
+.copy-button {
+  background: linear-gradient(180deg, #7a4a29, #563018);
+  color: #fff0c9;
+  border: 2px solid #3a1f10;
+  border-radius: 4px;
+  padding: 0.75rem 1.25rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  min-width: 145px;
+}
+
+.copy-button:hover {
+  background: linear-gradient(180deg, #8f562f, #67391c);
+}
+
+.modifier-breakdown {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: rgba(255, 246, 210, 0.45);
+  border: 1px solid rgba(112, 75, 38, 0.45);
+  color: #2b1a0f;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px dotted rgba(84, 54, 28, 0.45);
+}
+
+.breakdown-row:last-child {
+  border-bottom: none;
+}
+
+.breakdown-row strong {
+  color: #2b1a0f;
+  font-weight: 700;
+  text-align: right;
+}
+
+.breakdown-row--total {
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid #8b1f24;
+  border-bottom: none;
+  font-size: 1.05rem;
+}
+
+.summary-box {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(139, 31, 36, 0.45);
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.summary-box h3 {
+  margin: 0 0 0.85rem;
+  font-size: 1.75rem;
+}
+
+.summary-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.summary-item,
+.loot-row,
+.material-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.75rem;
+  background: linear-gradient(180deg, #fff4cf, #ead7a1);
+  color: #2b1a0f;
+  border: 1px solid rgba(184, 138, 74, 0.75);
+  border-radius: 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.summary-item strong,
+.loot-amount,
+.material-amount {
+  color: #8b1f24;
+  font-weight: 700;
+}
