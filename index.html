@@ -59,33 +59,33 @@
       <p id="ritualNote" class="note">No ritual selected.</p>
     </section>
 
-    <section class="planner-layout">
-      <aside class="panel result-panel">
-        <p class="eyebrow">Result</p>
-        <h2>Downtime Result</h2>
+    <aside class="planner-card result-panel">
+  <div class="planner-card-header">
+    <div>
+      <p class="eyebrow">Planner</p>
+      <h2>Military Unit</h2>
+    </div>
 
-        <div class="rank-card">
-          <span>Effective Rank</span>
-          <strong id="effectiveRank">1</strong>
-        </div>
+    <button id="copySummary" type="button" class="copy-button">Copy summary</button>
+  </div>
 
-        <div id="breakdown" class="breakdown"></div>
+  <label class="control">
+    <span>Character Name</span>
+    <input id="characterName" type="text" placeholder="e.g. Yoren Clein" />
+  </label>
 
-        <button id="copySummary" class="primary-button" type="button">Copy Summary</button>
-      </aside>
+  <label class="control">
+    <span>Unit Name</span>
+    <input id="unitName" type="text" placeholder="e.g. Hearthguard" />
+  </label>
 
-      <section class="panel output-panel">
-        <p class="eyebrow" id="actionType">Loot</p>
-        <h2 id="actionTitle">Mercenary Work</h2>
-        <p id="actionDescription" class="subtitle"></p>
+  <div class="modifier-breakdown" id="modifierBreakdown"></div>
 
-        <div id="lootOutput" class="loot-grid"></div>
-
-        <div class="rules-note">
-          <h3>Random Resources</h3>
-          <p>Random resources mean a 25% chance to receive either herbs, mana, money, or crafting resources. Use the result as a spring-board for what your military unit has been doing during downtime.</p>
-        </div>
-      </section>
+  <div class="summary-box">
+    <h3>Downtime result</h3>
+    <div id="productionSummary" class="summary-list"></div>
+  </div>
+</aside>
     </section>
   </main>
 
