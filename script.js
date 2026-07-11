@@ -31,13 +31,21 @@ function slug(value) {
 }
 
 async function init() {
-  const [optionsResponse, ritualsResponse] = await Promise.all([
-    fetch("military-options.json"),
-    fetch("military-rituals.json")
-  ]);
+const [optionsResponse, ritualsResponse] = await Promise.all([
+  fetch("./military-options.json"),
+  fetch("./military-rituals.json")
+]);
 
-  state.data = await optionsResponse.json();
-  const ritualData = await ritualsResponse.json();
+if (!optionsResponse.ok) {
+  throw new Error(`military-options.json failed to load: ${optionsResponse.status}`);
+}
+
+if (!ritualsResponse.ok) {
+  throw new Error(`military-rituals.json failed to load: ${ritualsResponse.status}`);
+}
+
+state.data = await optionsResponse.json();
+const ritualData = await ritualsResponse.json();
 
   state.rituals = [
     {
