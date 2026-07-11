@@ -219,7 +219,6 @@ function render() {
   </div>
 `;
 
-}
 
   els.actionType.textContent = action.type === "loot" ? "Loot" : action.type === "guerdon" ? "Guerdon Eligible" : "Narrative";
   els.actionTitle.textContent = action.name;
