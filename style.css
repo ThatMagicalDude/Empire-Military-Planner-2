@@ -525,3 +525,25 @@ button:active { transform: translateY(0); }
   content: none !important;
   display: none !important;
 }
+/* Fix stray dialog border/box */
+.action-dialog:not([open]) {
+  display: none !important;
+}
+
+.action-dialog {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none;
+}
+
+.action-dialog[open] {
+  border: 1px solid var(--steel-dark) !important;
+  outline: none !important;
+  background-color: var(--parchment) !important;
+  background-image:
+    radial-gradient(circle at 20% 0, rgba(255,255,255,.32), transparent 28rem),
+    repeating-linear-gradient(0deg, rgba(73,44,20,.022) 0 1px, transparent 1px 4px) !important;
+  box-shadow:
+    inset 0 0 0 3px rgba(255,244,204,.45),
+    var(--shadow) !important;
+}
