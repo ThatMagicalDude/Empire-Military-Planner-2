@@ -296,7 +296,7 @@ function render() {
   els.modifierSelect.value = String(state.modifier);
   els.ritualSelect.value = state.ritualId;
 
-  els.baseUnitRank.textContent = "Level 1 / Rank 5";
+  els.baseUnitRank.textContent = "Level 5";
   els.ritualNote.textContent = ritual.note || "No ritual selected.";
   els.listEyebrow.textContent = activity.name;
   els.actionsHeading.textContent = `${activity.name} assignments`;
