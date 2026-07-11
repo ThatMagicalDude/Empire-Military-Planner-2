@@ -1,0 +1,59 @@
+{
+  "version": "0.1",
+  "rituals": [
+    {
+      "id": "none",
+      "name": "No ritual",
+      "activity": "All",
+      "rankModifier": 0,
+      "multiplier": 1,
+      "bonusCoin": 0,
+      "note": "No ritual selected."
+    },
+    {
+      "id": "blessing-of-arms",
+      "name": "Blessing of Arms",
+      "activity": "All",
+      "rankModifier": 1,
+      "multiplier": 1,
+      "bonusCoin": 0,
+      "note": "+1 effective unit rank for this downtime action."
+    },
+    {
+      "id": "march-of-iron",
+      "name": "March of Iron",
+      "activity": "Campaigning",
+      "rankModifier": 2,
+      "multiplier": 1,
+      "bonusCoin": 0,
+      "note": "+2 effective rank while Campaigning. Placeholder ritual."
+    },
+    {
+      "id": "fog-of-war",
+      "name": "Fog of War",
+      "activity": "Patrol",
+      "rankModifier": 1,
+      "multiplier": 1,
+      "bonusCoin": 0,
+      "note": "+1 effective rank while Patrolling. Placeholder ritual."
+    },
+    {
+      "id": "plunderers-fortune",
+      "name": "Plunderer's Fortune",
+      "activity": "Raid",
+      "rankModifier": 0,
+      "multiplier": 1,
+      "bonusCoin": 25,
+      "note": "Adds +25 Coin if the result includes Coin. Placeholder ritual."
+    },
+    {
+      "id": "ill-omens",
+      "name": "Ill Omens",
+      "activity": "All",
+      "rankModifier": -1,
+      "multiplier": 1,
+      "bonusCoin": 0,
+      "note": "-1 effective unit rank. Placeholder debuff."
+    }
+  ]
+}
