@@ -287,6 +287,8 @@ function render() {
   const ritual = getRitual();
   const effectiveRank = getEffectiveRank();
 
+  renderEffectiveLevel();
+
   els.activitySelect.value = state.activityId;
   els.actionSelect.value = state.actionId;
   els.mithrilUpgrade.value = String(state.mithrilUpgrade);
@@ -306,7 +308,7 @@ function render() {
 function renderEffectiveLevel() {
   const level = getEffectiveRank();
   const ritual = getRitual();
-  const activity = getActivity();
+  const activity = getCurrentActivity();
 
   const activityLabel = activity?.name || "Military action";
 
