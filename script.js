@@ -485,7 +485,7 @@ function renderOutput(action) {
       <strong>None unless the plot option states otherwise</strong>
     </div>
   `;
-}
+
     els.productionSummary.innerHTML = `
     <div class="summary-item">
       <span>Outcome</span>
