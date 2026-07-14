@@ -496,7 +496,7 @@ function renderOutput(action) {
       <strong>None unless the plot option states otherwise</strong>
     </div>
   `;
-}
+
 
 function getSummaryLines() {
 
