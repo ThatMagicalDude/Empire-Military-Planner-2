@@ -417,27 +417,24 @@ function renderOutput(action) {
 
   if (action.type === "venture") {
     const rewardRows = getActionRewardRows(action);
-    els.productionSummary.innerHTML = `
-      ${action.restricted ? `
-        <div class="summary-item">
-          <span>Restriction</span>
-          <strong>${action.restricted}</strong>
-        </div>
-      ` : ""}
-      ${rewardRows.length ? rewardRows.map(row => `
-        <div class="summary-item">
-          <span>${row.name}</span>
-          <strong>${row.amount}</strong>
-        </div>
-      `).join("") : `
-        <div class="summary-item">
-          <span>Outcome</span>
-          <strong>Narrative or plot result</strong>
-        </div>
-      `}
+
+    els.productionSummary.innerHTML = rewardRows.length ? rewardRows.map(row => `
+      <div class="summary-item">
+        <span>${row.name}</span>
+        <strong>${row.amount}</strong>
+      </div>
+    `).join("") : `
+      <div class="summary-item">
+        <span>Outcome</span>
+        <strong>Narrative or plot result</strong>
+      </div>
     `;
+
     return;
   }
+
+  // rest of your renderOutput continues here...
+}
 
   if (action.type === "loot") {
     const row = getLootRow();
