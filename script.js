@@ -497,8 +497,8 @@ function renderOutput(action) {
     </div>
   `;
 
+}
 
-function getSummaryLines() {
 
 function getActionRewardRows(action, rank = getEffectiveRank()) {
   const multiplier = Number(getRitual().productionMultiplier || 1);
