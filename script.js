@@ -16,6 +16,7 @@ const state = {
 const els = {
   characterName: document.querySelector("#characterName"),
   unitName: document.querySelector("#unitName"),
+
   activitySelect: document.querySelector("#activitySelect"),
   actionSelect: document.querySelector("#actionSelect"),
   baseUnitRank: document.querySelector("#baseUnitRank"),
@@ -29,7 +30,17 @@ const els = {
 
   modifierBreakdown: document.querySelector("#modifierBreakdown"),
   productionSummary: document.querySelector("#productionSummary"),
-  copySummary: document.querySelector("#copySummary")
+  copySummary: document.querySelector("#copySummary"),
+
+  listEyebrow: document.querySelector("#listEyebrow"),
+  actionsHeading: document.querySelector("#actionsHeading"),
+  actionCards: document.querySelector("#actionCards"),
+  actionCount: document.querySelector("#actionCount"),
+  emptyState: document.querySelector("#emptyState"),
+
+  actionDialog: document.querySelector("#actionDialog"),
+  closeDialog: document.querySelector("#closeDialog"),
+  dialogContent: document.querySelector("#dialogContent")
 };
 
 function requiredElementsExist() {
