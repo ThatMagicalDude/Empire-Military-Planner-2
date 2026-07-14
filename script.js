@@ -14,29 +14,22 @@ const state = {
 };
 
 const els = {
+  characterName: document.querySelector("#characterName"),
+  unitName: document.querySelector("#unitName"),
   activitySelect: document.querySelector("#activitySelect"),
+  actionSelect: document.querySelector("#actionSelect"),
   baseUnitRank: document.querySelector("#baseUnitRank"),
   mithrilUpgrade: document.querySelector("#mithrilUpgrade"),
   modifierSelect: document.querySelector("#modifierSelect"),
   ritualSelect: document.querySelector("#ritualSelect"),
-  ritualNote: document.querySelector("#ritualNote"),
 
-  characterName: document.querySelector("#characterName"),
-  unitName: document.querySelector("#unitName"),
-  actionSelect: document.querySelector("#actionSelect"),
+  ritualNote: document.querySelector("#ritualNote"),
+  effectiveLevelDisplay: document.querySelector("#effectiveLevelDisplay"),
+  effectiveLevelNote: document.querySelector("#effectiveLevelNote"),
+
   modifierBreakdown: document.querySelector("#modifierBreakdown"),
   productionSummary: document.querySelector("#productionSummary"),
-  copySummary: document.querySelector("#copySummary"),
-
-  listEyebrow: document.querySelector("#listEyebrow"),
-  actionsHeading: document.querySelector("#actions-heading"),
-  actionCards: document.querySelector("#actionCards"),
-  actionCount: document.querySelector("#actionCount"),
-  emptyState: document.querySelector("#emptyState"),
-
-  actionDialog: document.querySelector("#actionDialog"),
-  closeDialog: document.querySelector("#closeDialog"),
-  dialogContent: document.querySelector("#dialogContent")
+  copySummary: document.querySelector("#copySummary")
 };
 
 function requiredElementsExist() {
@@ -110,7 +103,11 @@ async function init() {
   bindEvents();
   render();
 }
-
+function getEffectiveRank() {
+  const ritual = getRitual();
+  const raw = DEFAULT_UNIT_RANK + state.mithrilUpgrade + state.modifier + Number(ritual.rankModifier || 0);
+  return Math.max(MIN_UNIT_RANK, Math.min(Number(state.data.maxRank || 18), raw));
+}
 function getMaxRank() {
   return Number(state.data?.maxRank || 18);
 }
@@ -304,6 +301,62 @@ function render() {
   renderBreakdown(activity, ritual, effectiveRank);
   renderOutput(action);
   renderActionCards(activity.actions);
+}
+
+function renderEffectiveLevel() {
+  const level = getEffectiveRank();
+  const ritual = getRitual();
+  const activity = getActivity();
+
+  const activityLabel = activity?.name || "Military action";
+
+  if (els.effectiveLevelDisplay) {
+    els.effectiveLevelDisplay.textContent = level;
+    els.effectiveLevelDisplay.classList.toggle("debuffed", level < DEFAULT_UNIT_RANK);
+    els.effectiveLevelDisplay.classList.toggle("boosted", level > DEFAULT_UNIT_RANK);
+  }
+
+  const parts = [`Base ${DEFAULT_UNIT_RANK}`];
+
+  if (state.mithrilUpgrade) {
+    parts.push(`+${state.mithrilUpgrade} Mithril`);
+  }
+
+  if (state.modifier) {
+    parts.push(
+      state.modifier > 0
+        ? `+${state.modifier} campaign buff`
+        : `${state.modifier} campaign debuff`
+    );
+  }
+
+  if (ritual.rankModifier > 0) {
+    parts.push(`+${ritual.rankModifier} ${ritual.name}`);
+  }
+
+  if (ritual.rankModifier < 0) {
+    parts.push(`${ritual.rankModifier} ${ritual.name}`);
+  }
+
+  if (els.effectiveLevelNote) {
+    els.effectiveLevelNote.textContent = `${activityLabel}: ${parts.join(" ")} = Rank ${level}`;
+
+    if (level < DEFAULT_UNIT_RANK) {
+      els.effectiveLevelNote.textContent += " — using debuffed reward rows.";
+    }
+  }
+
+  if (els.ritualNote) {
+    els.ritualNote.textContent = ritual.note;
+    els.ritualNote.classList.toggle(
+      "ritual-note--buff",
+      ritual.rankModifier > 0 || ritual.productionMultiplier > 1
+    );
+    els.ritualNote.classList.toggle(
+      "ritual-note--debuff",
+      ritual.rankModifier < 0 || ritual.productionMultiplier < 1
+    );
+  }
 }
 
 function renderBreakdown(activity, ritual, effectiveRank) {
