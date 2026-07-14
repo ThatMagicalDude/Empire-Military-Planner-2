@@ -140,7 +140,7 @@ function getRitual() {
 
 function getEffectiveRank() {
   const ritual = getRitual();
-  const raw = DEFAULT_BASE_RANK + state.mithrilUpgrade + state.modifier + Number(ritual.rankModifier || 0);
+  const raw = DEFAULT_UNIT_RANK + state.mithrilUpgrade + state.modifier + Number(ritual.rankModifier || 0);
   return Math.max(MIN_UNIT_RANK, Math.min(getMaxRank(), raw));
 }
 
@@ -166,7 +166,7 @@ function populateControls() {
 
 function populateMithrilUpgrade() {
   els.mithrilUpgrade.innerHTML = "";
-  const maxPermanentIncrease = Math.max(0, getMaxRank() - DEFAULT_BASE_RANK);
+  const maxPermanentIncrease = Math.max(0, getMaxRank() - DEFAULT_UNIT_RANK);
 
   for (let i = 0; i <= maxPermanentIncrease; i += 1) {
     const option = document.createElement("option");
@@ -380,7 +380,7 @@ function renderBreakdown(activity, ritual, effectiveRank) {
     </div>
     <div class="breakdown-row">
       <span>Base unit</span>
-      <strong>Level 1 / Rank ${DEFAULT_BASE_RANK}</strong>
+      <strong>Level 1 / Rank ${DEFAULT_UNIT_RANK}</strong>
     </div>
     <div class="breakdown-row">
       <span>Mithril permanent upgrade</span>
@@ -589,7 +589,7 @@ function getSummaryLines() {
     "",
     `Activity: ${activity.name}`,
     `Action: ${action.name}`,
-    `Base Unit: Level 1 / Rank ${DEFAULT_BASE_RANK}`,
+    `Base Unit: Level 1 / Rank ${DEFAULT_UNIT_RANK}`,
     `Mithril Upgrade: +${state.mithrilUpgrade}`,
     `Campaign Modifier: ${state.modifier > 0 ? "+" : ""}${state.modifier}`,
     `Ritual: ${ritual.name}`,
