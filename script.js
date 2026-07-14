@@ -486,11 +486,19 @@ function renderOutput(action) {
     </div>
   `;
 }
-  els.productionSummary.innerHTML = `
-    <div class="summary-item"><span>Outcome</span><strong>Narrative or plot result</strong></div>
-    <div class="summary-item"><span>Income</span><strong>None unless the plot option states otherwise</strong></div>
+    els.productionSummary.innerHTML = `
+    <div class="summary-item">
+      <span>Outcome</span>
+      <strong>Narrative or plot result</strong>
+    </div>
+    <div class="summary-item">
+      <span>Income</span>
+      <strong>None unless the plot option states otherwise</strong>
+    </div>
   `;
 }
+
+function getSummaryLines() {
 
 function getActionRewardRows(action, rank = getEffectiveRank()) {
   const multiplier = Number(getRitual().productionMultiplier || 1);
