@@ -411,7 +411,12 @@ function renderBreakdown(activity, ritual, effectiveRank) {
 
 function renderOutput(action) {
   if (!action) {
-    els.productionSummary.innerHTML = `<div class="summary-item"><span>Outcome</span><strong>No action selected</strong></div>`;
+    els.productionSummary.innerHTML = `
+      <div class="summary-item">
+        <span>Outcome</span>
+        <strong>No action selected</strong>
+      </div>
+    `;
     return;
   }
 
@@ -433,35 +438,54 @@ function renderOutput(action) {
     return;
   }
 
-  // rest of your renderOutput continues here...
-}
-
   if (action.type === "loot") {
-    const row = getLootRow();
-    const multiplier = Number(getRitual().productionMultiplier || 1);
-    const production = multiplier === 1
-      ? row.label
-      : `${Math.ceil(Number(row.production || 0) * multiplier)} random resources after ritual modifier`;
+    const rewardRows = getActionRewardRows(action);
 
-    els.productionSummary.innerHTML = `
-      <div class="summary-item"><span>Production</span><strong>${production}</strong></div>
-      <div class="summary-item"><span>25% Resources</span><strong>${row.resources}</strong></div>
-      <div class="summary-item"><span>25% Money</span><strong>${row.money}</strong></div>
-      <div class="summary-item"><span>25% Mana</span><strong>${row.mana}</strong></div>
-      <div class="summary-item"><span>25% Herbs</span><strong>${row.herbs}</strong></div>
+    els.productionSummary.innerHTML = rewardRows.length ? rewardRows.map(row => `
+      <div class="summary-item">
+        <span>${row.name}</span>
+        <strong>${row.amount}</strong>
+      </div>
+    `).join("") : `
+      <div class="summary-item">
+        <span>Outcome</span>
+        <strong>No loot result found</strong>
+      </div>
     `;
+
     return;
   }
 
   if (action.type === "guerdon") {
     els.productionSummary.innerHTML = `
-      <div class="summary-item"><span>Income</span><strong>Only if Imperial guerdon applies</strong></div>
-      <div class="summary-item"><span>Contribution</span><strong>Effective rank ${getEffectiveRank()}</strong></div>
-      <div class="summary-item"><span>Note</span><strong>Adds unit strength to the selected army, fortification, or spy network.</strong></div>
+      <div class="summary-item">
+        <span>Income</span>
+        <strong>Only if Imperial guerdon applies</strong>
+      </div>
+      <div class="summary-item">
+        <span>Contribution</span>
+        <strong>Effective rank ${getEffectiveRank()}</strong>
+      </div>
+      <div class="summary-item">
+        <span>Note</span>
+        <strong>Adds unit strength to the selected army, fortification, or spy network.</strong>
+      </div>
     `;
+
     return;
   }
 
+  els.productionSummary.innerHTML = `
+    <div class="summary-item">
+      <span>Outcome</span>
+      <strong>Narrative or plot result</strong>
+    </div>
+    <div class="summary-item">
+      <span>Income</span>
+      <strong>None unless the plot option states otherwise</strong>
+    </div>
+  `;
+}
   els.productionSummary.innerHTML = `
     <div class="summary-item"><span>Outcome</span><strong>Narrative or plot result</strong></div>
     <div class="summary-item"><span>Income</span><strong>None unless the plot option states otherwise</strong></div>
