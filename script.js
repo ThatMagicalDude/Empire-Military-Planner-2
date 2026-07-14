@@ -1,13 +1,11 @@
-const DEFAULT_BASE_RANK = 5;
+const DEFAULT_UNIT_RANK = 5;
 const MIN_UNIT_RANK = 1;
-const DEFAULT_ACTIVITY = "guarding";
-const DEFAULT_ACTION = "mercenary-work";
 
 const state = {
   data: null,
   rituals: [],
-  activityId: DEFAULT_ACTIVITY,
-  actionId: DEFAULT_ACTION,
+  activityId: "guarding",
+  actionId: "mercenary-work",
   mithrilUpgrade: 0,
   modifier: 0,
   ritualId: "none"
